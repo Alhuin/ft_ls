@@ -11,10 +11,7 @@
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#include "Libft/ft_libft/libft.h"
 #include "ft_ls.h"
-#include <stdio.h>
-#include <sys/stat.h>
 
 char	*ft_get_permissions(mode_t mode, t_arbre **arbre)
 {
@@ -47,7 +44,8 @@ int		ft_get_stats(char *name, t_arbre **arbre, char *path)
 	stat(path, (*arbre)->file->sb);
 	if (name[0] == '.')
 		((*arbre)->file->hidden = 1);
-	(*arbre)->file->permissions = ft_get_permissions((*arbre)->file->sb->st_mode, arbre);
+	(*arbre)->file->permissions =
+		ft_get_permissions((*arbre)->file->sb->st_mode, arbre);
 	return (0);
 }
 
@@ -116,28 +114,28 @@ void			ft_print_tree(t_arbre *arbre, int type, int lengh)
 	}
 }
 
-void			ft_rev_print_tree(t_arbre *arbre)
+void			ft_rev_print_tree(t_arbre *arbre, int type, int lengh)
 {
 	if (arbre != NULL)
 	{
 		if (arbre->right)
-			ft_rev_print_tree(arbre->right);
-		ft_printf("%s\n", arbre->name);
+			ft_rev_print_tree(arbre->right, type, lengh);
+		ft_print_name(arbre, type, lengh);
 		if (arbre->left)
-			ft_rev_print_tree(arbre->left);
+			ft_rev_print_tree(arbre->left, type, lengh);
 	}
 }
 /*
-int main()
-{
-	t_arbre *arbre = NULL;
-	ft_addnode("Bonjour", &arbre);
-	ft_addnode("Je", &arbre);
-	ft_addnode("appelle", &arbre);
-	ft_addnode("Monsieur", &arbre);
-	ft_addnode("Marche", &arbre);
-	ft_addnode("PUTAIN", &arbre);
-	ft_print_tree(arbre);
-	return 0;
-}
-*/
+   int main()
+   {
+   t_arbre *arbre = NULL;
+   ft_addnode("Bonjour", &arbre);
+   ft_addnode("Je", &arbre);
+   ft_addnode("appelle", &arbre);
+   ft_addnode("Monsieur", &arbre);
+   ft_addnode("Marche", &arbre);
+   ft_addnode("PUTAIN", &arbre);
+   ft_print_tree(arbre);
+   return 0;
+   }
+   */

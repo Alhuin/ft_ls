@@ -11,17 +11,7 @@
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#include "sys/stat.h"
-#include "Libft/ft_libft/libft.h"
-#include "grp.h"
-#include "pwd.h"
-#include "time.h"
-#include "dirent.h"
-#include "stdlib.h"
-#include <errno.h>
 #include "ft_ls.h"
-#include "abr.c"
-#include <stdio.h>
 
 void	ft_print_date(char *time, char *str)
 {
