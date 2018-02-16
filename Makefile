@@ -6,7 +6,7 @@
 #    By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2017/12/21 18:36:09 by jjanin-r     #+#   ##    ##    #+#        #
-#    Updated: 2018/02/16 18:41:16 by jjanin-r    ###    #+. /#+    ###.fr      #
+#    Updated: 2018/02/16 19:13:22 by jjanin-r    ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -64,8 +64,12 @@ $(NAME): $(NAME_LIBFT) $(SRCO_LS)
 	@echo "-------------------------------------------------------------------"
 	@echo "\033[m"
 
+kill kenny:
+	cat killk.txt
+
 %.o: %.c $(HEADS)
 	@gcc $(C_FLAGS) -o $@ -c $< $(INCS)
+	@printf %b "Compiling $@...                                             \r"
 
 $(NAME_LIBFT):
 	@make -C $(PATH_LIBFT)
