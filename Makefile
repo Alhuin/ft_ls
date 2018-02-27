@@ -6,7 +6,7 @@
 #    By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2017/12/21 18:36:09 by jjanin-r     #+#   ##    ##    #+#        #
-#    Updated: 2018/02/27 12:18:38 by jjanin-r    ###    #+. /#+    ###.fr      #
+#    Updated: 2018/02/27 19:39:58 by jjanin-r    ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -15,7 +15,7 @@
 
 NAME = ft_ls
 
-FILES_LS = ft_ls.c abr.c
+FILES_LS = ft_ls.c tree.c utils.c print.c
 
 PATH_LIBFT = ./Libft/
 
@@ -63,9 +63,6 @@ $(NAME): $(NAME_LIBFT) $(SRCO_LS)
 	@echo "       .'       \".\"       '.                     \||/"
 	@echo "-------------------------------------------------------------------"
 	@echo "\033[m"
-
-kill kenny:
-	cat killk.txt
 
 %.o: %.c $(HEADS)
 	gcc $(FLAGS) -o $@ -c $< $(INCS)
