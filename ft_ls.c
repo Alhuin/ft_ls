@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/13 16:17:24 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/02/27 01:24:45 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/02/27 18:58:05 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -152,7 +152,13 @@ int		ft_getdirstats(t_file **file, char *path, t_flags *flags)
 			lengh = ft_strlen(subfile->name);
 		subfile->path = ft_buildpath(path, subfile->name);
 		stat(subfile->path, &subfile->sb);
-		if (flags->r == 1)
+		if (flags->l == 1)
+			(*file)->total += subfile->sb.st_blocks;
+		if (flags->t == 1 && flags->r != 1)
+			ft_taddnode(&subfile, &(*file)->subtree);
+		else if (flags->t == 1 && flags->r == 1)
+			ft_traddnode(&subfile, &(*file)->subtree);
+		else if (flags->r == 1 && flags->t != 1)
 			ft_raddnode(&subfile, &(*file)->subtree);
 		else
 			ft_addnode(&subfile, &(*file)->subtree);
@@ -160,8 +166,10 @@ int		ft_getdirstats(t_file **file, char *path, t_flags *flags)
 	if (closedir(rep) == -1)
 		exit(-1);
 	ft_printf("%s:\n", (*file)->name);
+	if (flags->l == 1)
+		ft_printf("total %d\n", (*file)->total);
 	ft_print_tree((*file)->subtree, lengh + 1, flags);
-	ft_printf("\n\n");
+	ft_printf(flags->l == 1 ? "\n" : "\n\n");
 	return (0);
 }
 
@@ -171,7 +179,8 @@ int		ft_getargs(t_file **file, char *arg, char *pref, int a)
 	(*file)->path = ft_strjoin((pref ? pref :"./" ), arg);
 	if (!((*file)->name = ft_strdup(arg)))
 		return (-1);
-	return (stat((*file)->path, &(*file)->sb));
+	stat((*file)->path, &(*file)->sb);
+	return (0);
 }
 
 int main(int argc, char *argv[])
@@ -190,9 +199,15 @@ int main(int argc, char *argv[])
 	{
 		if (!(file = malloc(sizeof(t_file))))
 			return (-1);
+		file->total = 0;
 		file->subtree = NULL;
+		file->alphatime = NULL;
 		ft_getargs(&file, argv[i], NULL, 1);
-		if (flags->r == 1)
+		if (flags->t == 1 && flags->r != 1)
+			ft_taddnode(&file, &tree);
+		else if (flags->t == 1 && flags->r == 1)
+			ft_traddnode(&file, &tree);
+		else if (flags->r == 1 && flags->t != 1)
 			ft_raddnode(&file, &tree);
 		else
 			ft_addnode(&file, &tree);

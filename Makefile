@@ -6,7 +6,7 @@
 #    By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2017/12/21 18:36:09 by jjanin-r     #+#   ##    ##    #+#        #
-#    Updated: 2018/02/27 00:44:42 by jjanin-r    ###    #+. /#+    ###.fr      #
+#    Updated: 2018/02/27 12:18:38 by jjanin-r    ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -31,7 +31,7 @@ SRCO_LS = $(SRC_LS:.c=.o)
 
 HEADS = $(PATH_LIBFT)libft.h $(PATH_LS)ft_ls.h
 
-FLAGS = -Wall -Wextra -Werror -fsanitize=address
+FLAGS = -Wall -Wextra -Werror -fsanitize=address -g
 
 all: $(NAME)
 

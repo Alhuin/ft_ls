@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/14 13:47:11 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/02/27 01:18:49 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/02/27 18:53:00 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -21,7 +21,63 @@ int				ft_createnode(t_file **file, t_tree **tocreate)
 	(*node).file = *file;
 	node->left = NULL;
 	node->right = NULL;
+	(*file)->alphatime = NULL;
+	(*file)->subtree = NULL;
 	*tocreate = node;
+	return (0);
+}
+
+int				ft_traddnode(t_file **file, t_tree **node)
+{
+	if (*node == NULL)
+		return (ft_createnode(file, node));
+	else
+	{
+		if ((*file)->sb.st_mtime == (*node)->file->sb.st_mtime)
+			return (ft_raddnode(file, &(*node)->file->alphatime));
+		if ((*file)->sb.st_mtime < (*node)->file->sb.st_mtime)
+		{
+			if ((*node)->left)
+				ft_traddnode(file, &(*node)->left);
+			else
+				return (ft_createnode(file, &(*node)->left));
+		}
+		if ((*file)->sb.st_mtime == (*node)->file->sb.st_mtime)
+			ft_raddnode(file, node);
+		if ((*file)->sb.st_mtime > (*node)->file->sb.st_mtime)
+		{
+			if ((*node)->right)
+				ft_traddnode(file, &(*node)->right);
+			else
+				return (ft_createnode(file, &(*node)->right));
+		}
+	}
+	return (0);
+}
+
+int				ft_taddnode(t_file **file, t_tree **node)
+{
+	if (*node == NULL)
+		return (ft_createnode(file, node));
+	else
+	{
+		if ((*file)->sb.st_mtime == (*node)->file->sb.st_mtime)
+			return (ft_addnode(file, &(*node)->file->alphatime));
+		if ((*file)->sb.st_mtime > (*node)->file->sb.st_mtime)
+		{
+			if ((*node)->left)
+				ft_taddnode(file, &(*node)->left);
+			else
+				return (ft_createnode(file, &(*node)->left));
+		}
+		if ((*file)->sb.st_mtime < (*node)->file->sb.st_mtime)
+		{
+			if ((*node)->right)
+				ft_taddnode(file, &(*node)->right);
+			else
+				return (ft_createnode(file, &(*node)->right));
+		}
+	}
 	return (0);
 }
 
@@ -97,21 +153,14 @@ void			ft_print_tree(t_tree *arbre, int lengh, t_flags *flags)
 	{
 		if (arbre->left)
 			ft_print_tree(arbre->left, lengh, flags);
-		ft_print_name(arbre, lengh, flags);
+		if (flags->r != 1)
+			ft_print_name(arbre, lengh, flags);
+		if (arbre->file->alphatime != NULL)
+			ft_print_tree(arbre->file->alphatime, lengh, flags);
+		if (flags->r == 1)
+			ft_print_name(arbre, lengh, flags);
 		if (arbre->right)
 			ft_print_tree(arbre->right, lengh, flags);
-	}
-}
-
-void			ft_rev_print_tree(t_tree *arbre, int lengh, t_flags *flags)
-{
-	if (arbre != NULL)
-	{
-		if (arbre->right)
-			ft_print_tree(arbre->right, lengh, flags);
-		ft_print_name(arbre, lengh, flags);
-		if (arbre->left)
-			ft_print_tree(arbre->left, lengh, flags);
 	}
 }
 
