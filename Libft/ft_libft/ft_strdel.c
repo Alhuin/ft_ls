@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/01/10 16:27:09 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/01/12 12:25:01 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/02/28 20:00:10 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -15,9 +15,10 @@
 
 void	ft_strdel(char **as)
 {
-	if (as != NULL)
-	{
-		free(*as);
-		*as = NULL;
-	}
+	if (as)
+		if (as != NULL)
+		{
+			free(*as);
+			*as = NULL;
+		}
 }

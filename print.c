@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/27 19:00:54 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/02/28 16:52:26 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/02/28 18:21:09 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -15,6 +15,7 @@
 
 void		ft_print_name(t_tree *tree, int lengh, t_flags *flags)
 {
+	flags->arg--;
 	if (flags->l != 1)
 	{
 		if (tree->file->name[0] != '.' || flags->a == 1)
@@ -70,7 +71,9 @@ int			ft_printl(t_file **file, t_flags **flags)
 	struct group	*grp;
 	struct passwd	*pwd;
 	char			*time;
+	char			buf[20];
 
+	ft_bzero(buf, 20);
 	if ((*file)->name[0] != '.' || (*flags)->a == 1)
 	{
 		ft_printf("%s", ft_get_perms((*file)->sb.st_mode));
@@ -79,10 +82,15 @@ int			ft_printl(t_file **file, t_flags **flags)
 		pwd = getpwuid((*file)->sb.st_uid);
 		ft_printf("%9s", pwd->pw_name);
 		ft_printf("%9s", grp->gr_name);
-		ft_printf("%8lld", (*file)->sb.st_size);
+		ft_printf("%7lld", (*file)->sb.st_size);
 		time = ctime(&(*file)->sb.st_mtime);
 		ft_print_date(time, "MDH");
-		if (S_ISDIR((*file)->sb.st_mode))
+		if (S_ISLNK((*file)->sb.st_mode))
+		{
+			readlink((*file)->path, buf, 25);
+			ft_printf(" {magenta}%s{eoc} -> %s\n", (*file)->name, buf);
+		}
+		else if (S_ISDIR((*file)->sb.st_mode))
 			ft_printf(" {bcyan}%s{eoc}\n", (*file)->name);
 		else if ((*file)->sb.st_mode & S_IXUSR)
 			ft_printf(" {red}%s{eoc}\n", (*file)->name);

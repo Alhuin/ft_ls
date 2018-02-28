@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/13 16:17:24 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/02/28 16:45:54 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/02/28 21:12:03 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -44,8 +44,8 @@ static int		ft_getflags(t_flags **flags, char *arg)
 int				ft_getargs(t_file **file, char *arg, char *pref, int a)
 {
 	(*file)->arg = a;
-	(*file)->path = ft_strjoin((pref ? pref : "./"), arg);
-	if (!((*file)->name = ft_strdup(arg)))
+	(*file)->path = ft_strjoinfree((pref ? pref : "./"), arg, 0);
+	if (!((*file)->name = arg))
 		return (-1);
 	lstat((*file)->path, &(*file)->sb);
 	return (0);
@@ -75,6 +75,10 @@ int				main(int argc, char *argv[])
 	if (!(flags = malloc(sizeof(t_flags))))
 		return (-1);
 	flags->a = 0;
+	flags->t = 0;
+	flags->l = 0;
+	flags->bigr = 0;
+	flags->r = 0;
 	while (argv[i] && ft_getflags(&flags, argv[i]) == 1)
 		i++;
 	flags->arg = 0;
@@ -91,5 +95,7 @@ int				main(int argc, char *argv[])
 		i++;
 	}
 	ft_computeargs(tree, &flags);
+	ft_free_tree(&tree);
+	free(flags);
 	return (0);
 }

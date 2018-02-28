@@ -6,12 +6,39 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/27 19:10:55 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/02/28 16:53:39 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/02/28 21:17:11 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+
+char	*ft_strjoinfree(char *s1, char *s2, int f)
+{
+	char	*ret;
+	size_t	i;
+	size_t	j;
+
+	j = 0;
+	i = 0;
+	if (s1 == 0 || s2 == 0)
+		return (NULL);
+	if (!(ret = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2)) + 1)))
+		return (NULL);
+	while (s1[i])
+	{
+		ret[i] = s1[i];
+		i++;
+	}
+	while (s2[i])
+		ret[i++] = s2[j++];
+	ret[i] = '\0';
+	if (f == 1 || f == 3)
+		ft_strdel(&s1);
+	if (f == 2 || f == 3)
+		ft_strdel(&s2);
+	return (ret);
+}
 
 char	*ft_get_perms(mode_t mode)
 {
@@ -20,7 +47,12 @@ char	*ft_get_perms(mode_t mode)
 	if (!(ret = malloc(sizeof(char) * 11)))
 		return (NULL);
 	ret[0] = '\0';
-	ft_strcat(ret, (S_ISDIR(mode) ? "d" : "-"));
+	if (S_ISLNK(mode))
+		ft_strcat(ret, "l");
+	else if (S_ISDIR(mode))
+		ft_strcat(ret, "d");
+	else
+		ft_strcat(ret, "-");
 	ft_strcat(ret, ((mode & S_IRUSR) ? "r" : "-"));
 	ft_strcat(ret, ((mode & S_IWUSR) ? "w" : "-"));
 	ft_strcat(ret, ((mode & S_IXUSR) ? "x" : "-"));
@@ -49,11 +81,11 @@ char	*ft_buildpath(char *arg, char *name)
 		slash = (arg[i] == '/' ? 1 : 0);
 	}
 	if (arg && slash == 1)
-		ret = ft_strjoin(arg, name);
+		ret = ft_strjoinfree(arg, name, 0);
 	else
 	{
 		ret = ft_strjoin((arg ? arg : "."), "/");
-		ret = ft_strjoin(ret, name);
+		ret = ft_strjoinfree(ret, name, 0);
 	}
 	return (ret);
 }
@@ -88,7 +120,7 @@ int		ft_getdirstats(t_file **file, char *path, t_flags *flags)
 	DIR				*rep;
 	struct dirent	*fichierlu;
 	int				lengh;
-	t_file			*subfile;
+	t_file			*subfile = NULL;
 
 	lengh = 0;
 	rep = opendir(path);
@@ -97,8 +129,8 @@ int		ft_getdirstats(t_file **file, char *path, t_flags *flags)
 	while ((fichierlu = readdir(rep)) != NULL)
 	{
 		ft_subfile_init(&subfile, lengh, path, fichierlu->d_name);
-		if (lengh < ft_strlen(subfile->name))
-			lengh = ft_strlen(subfile->name);
+		if (lengh < (int)ft_strlen(subfile->name))
+			lengh = (int)ft_strlen(subfile->name);
 		if (flags->l == 1)
 			(*file)->total += subfile->sb.st_blocks;
 		ft_fill_tree(&subfile, &(*file)->subtree, flags);
@@ -110,6 +142,34 @@ int		ft_getdirstats(t_file **file, char *path, t_flags *flags)
 	if (flags->l == 1)
 		ft_printf("total %d\n", (*file)->total);
 	ft_print_tree((*file)->subtree, lengh + 1, flags);
-	ft_printf(flags->l == 1 ? "\n" : "\n\n");
+	ft_free_tree(&(*file)->subtree);
+	if (flags->arg > 0)
+		ft_printf("\n");
+	return (0);
+}
+
+int			ft_free_node(t_tree **node)
+{
+	(*node)->left = NULL;
+	(*node)->right = NULL;
+	ft_strdel(&(*node)->file->name);
+	ft_strdel(&(*node)->file->path);
+	free((*node)->file);
+	free(*node);
+	*node = NULL;
+	return (0);
+}
+
+int			ft_free_tree(t_tree **tree)
+{
+	if ((*tree)->left)
+		return (ft_free_tree(&(*tree)->left));
+	if ((*tree)->right)
+		return (ft_free_tree(&(*tree)->right));
+	if ((*tree)->file->subtree)
+		ft_free_tree(&(*tree)->file->subtree);
+	if ((*tree)->file->alphatime)
+		ft_free_tree(&(*tree)->file->alphatime);
+	ft_free_node(tree);
 	return (0);
 }
