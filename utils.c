@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/27 19:10:55 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/02/27 22:04:40 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/02/28 16:53:39 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -79,7 +79,7 @@ int		ft_subfile_init(t_file **subfile, int lengh, char *path, char *name)
 	if ((int)ft_strlen((*subfile)->name) > lengh)
 		lengh = ft_strlen((*subfile)->name);
 	(*subfile)->path = ft_buildpath(path, (*subfile)->name);
-	stat((*subfile)->path, &(*subfile)->sb);
+	lstat((*subfile)->path, &(*subfile)->sb);
 	return (0);
 }
 
@@ -97,6 +97,8 @@ int		ft_getdirstats(t_file **file, char *path, t_flags *flags)
 	while ((fichierlu = readdir(rep)) != NULL)
 	{
 		ft_subfile_init(&subfile, lengh, path, fichierlu->d_name);
+		if (lengh < ft_strlen(subfile->name))
+			lengh = ft_strlen(subfile->name);
 		if (flags->l == 1)
 			(*file)->total += subfile->sb.st_blocks;
 		ft_fill_tree(&subfile, &(*file)->subtree, flags);

@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/27 19:00:54 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/02/27 22:01:51 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/02/28 16:52:26 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -19,7 +19,9 @@ void		ft_print_name(t_tree *tree, int lengh, t_flags *flags)
 	{
 		if (tree->file->name[0] != '.' || flags->a == 1)
 		{
-			if (S_ISDIR(tree->file->sb.st_mode))
+			if (S_ISLNK(tree->file->sb.st_mode))
+				ft_printf("{magenta}%-*s{eoc}", lengh, tree->file->name);
+			else if (S_ISDIR(tree->file->sb.st_mode))
 				ft_printf("{bcyan}%-*s{eoc}", lengh, tree->file->name);
 			else if (tree->file->sb.st_mode & S_IXUSR)
 				ft_printf("{red}%-*s{eoc}", lengh, tree->file->name);
@@ -28,7 +30,7 @@ void		ft_print_name(t_tree *tree, int lengh, t_flags *flags)
 		}
 	}
 	else
-		ft_printl(&(tree->file), &flags);
+		ft_printl(&(tree->file),  &flags);
 }
 
 void		ft_print_tree(t_tree *tree, int lengh, t_flags *flags)

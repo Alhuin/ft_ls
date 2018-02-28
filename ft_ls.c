@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/13 16:17:24 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/02/27 22:06:15 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/02/28 16:45:54 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -47,7 +47,7 @@ int				ft_getargs(t_file **file, char *arg, char *pref, int a)
 	(*file)->path = ft_strjoin((pref ? pref : "./"), arg);
 	if (!((*file)->name = ft_strdup(arg)))
 		return (-1);
-	stat((*file)->path, &(*file)->sb);
+	lstat((*file)->path, &(*file)->sb);
 	return (0);
 }
 
@@ -74,10 +74,11 @@ int				main(int argc, char *argv[])
 	i = 1;
 	if (!(flags = malloc(sizeof(t_flags))))
 		return (-1);
-	while (ft_getflags(&flags, argv[i]) == 1)
+	flags->a = 0;
+	while (argv[i] && ft_getflags(&flags, argv[i]) == 1)
 		i++;
 	flags->arg = 0;
-	while (i < argc)
+	while (i < argc || (i == argc && flags->arg == 0))
 	{
 		flags->arg++;
 		if (!(file = malloc(sizeof(t_file))))
@@ -85,7 +86,7 @@ int				main(int argc, char *argv[])
 		file->total = 0;
 		file->subtree = NULL;
 		file->alphatime = NULL;
-		ft_getargs(&file, argv[i], NULL, 1);
+		ft_getargs(&file, (i == argc ? "./" : argv[i]), NULL, 1);
 		ft_fill_tree(&file, &tree, flags);
 		i++;
 	}
