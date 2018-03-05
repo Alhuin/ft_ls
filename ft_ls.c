@@ -95,7 +95,7 @@ int				main(int argc, char *argv[])
 		i++;
 	}
 	ft_computeargs(tree, &flags);
-	ft_free_tree(&tree);
+//	ft_free_tree(&tree);
 	free(flags);
 	return (0);
 }

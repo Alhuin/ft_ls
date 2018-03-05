@@ -85,7 +85,7 @@ char	*ft_buildpath(char *arg, char *name)
 	else
 	{
 		ret = ft_strjoin((arg ? arg : "."), "/");
-		ret = ft_strjoinfree(ret, name, 0);
+		ret = ft_strjoinfree(ret, name, 1);
 	}
 	return (ret);
 }
