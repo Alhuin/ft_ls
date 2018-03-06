@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/14 13:47:30 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/06 13:33:37 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/06 15:43:00 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -67,4 +67,5 @@ int					ft_printl(t_file **file, t_flags **flags);
 void				ft_free_node(t_tree **node);
 void				ft_free_tree(t_tree **tree);
 void				ft_last_free(t_tree *tree, t_file *file, t_flags *flags);
+void				ft_compute_rargs(t_tree *tree, t_flags **flags);
 #endif

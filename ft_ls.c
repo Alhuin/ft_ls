@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/13 16:17:24 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/06 13:57:41 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/06 17:21:26 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -80,6 +80,23 @@ int				ft_init_flags(t_flags **flags)
 	return (0);
 }
 
+void			ft_recursive(t_tree *tree, t_flags **flags)
+{
+//	dprintf(1, "file name = %s\n", tree->file->name);
+	if (tree->left)
+		ft_recursive(tree->left, flags);
+	if (tree->file->alphatime != NULL)
+		ft_recursive(tree->file->alphatime, flags);
+	if (S_ISDIR(tree->file->sb.st_mode) && (tree->file->name[0] != '.' || (*flags)->a == 1))
+	{
+		if (ft_getdirstats(&tree->file, tree->file->path, *flags) != -1)
+			ft_recursive(tree->file->subtree, flags);
+	}
+	if (tree->right)
+		ft_recursive(tree->right, flags);
+
+}
+
 int				main(int argc, char *argv[])
 {
 	t_flags		*flags;
@@ -93,7 +110,6 @@ int				main(int argc, char *argv[])
 		return (-1);
 	while (argv[i] && ft_getflags(&flags, argv[i]) == 1)
 		i++;
-	flags->arg = 0;
 	while (i < argc || (i == argc && flags->arg == 0))
 	{
 		flags->arg++;
@@ -107,17 +123,11 @@ int				main(int argc, char *argv[])
 		i++;
 	}
 	ft_computeargs(tree, &flags);
-	ft_last_free(tree, file, flags);
-	return (0);
-}
-
-void		ft_last_free(t_tree *tree, t_file *file, t_flags *flags)
-{
+	if (flags->bigr == 1)
+		ft_recursive(tree->file->subtree, &flags);
+	ft_free_tree(&tree);
 	free(flags);
-	free(tree);
-	free(file->name);
-	free(file->path);
-	free(file);
+	return (0);
 }
 
 void		ft_free_node(t_tree **node)
