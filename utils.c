@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/27 19:10:55 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/06 12:10:48 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/06 12:44:32 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -111,5 +111,6 @@ int		ft_getdirstats(t_file **file, char *path, t_flags *flags)
 		ft_printf("total %d\n", (*file)->total);
 	ft_print_tree((*file)->subtree, lengh + 1, flags);
 	ft_printf(flags->l == 1 ? "\n" : "\n\n");
+	ft_free_tree(&(*file)->subtree);
 	return (0);
 }

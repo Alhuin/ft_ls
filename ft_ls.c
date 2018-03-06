@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/13 16:17:24 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/06 12:13:43 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/06 13:57:41 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -41,10 +41,10 @@ static int		ft_getflags(t_flags **flags, char *arg)
 	return (0);
 }
 
-int				ft_getargs(t_file **file, char *arg, char *pref, int a)
+int				ft_getargs(t_file **file, char *arg)
 {
-	(*file)->arg = a;
-	(*file)->path = ft_strjoin((pref ? pref : "./"), arg);
+	(*file)->arg = 1;
+	(*file)->path = ft_strjoin("./", arg);
 	if (!((*file)->name = ft_strdup(arg)))
 		return (-1);
 	lstat((*file)->path, &(*file)->sb);
@@ -57,10 +57,27 @@ void	ft_computeargs(t_tree *tree, t_flags **flags)
 	{
 		if (tree->left)
 			ft_computeargs(tree->left, flags);
+		if (tree->file->alphatime != NULL)
+			ft_computeargs(tree->file->alphatime, flags);
+		if (tree->file->subtree != NULL)
+			ft_computeargs(tree->file->subtree, flags);
 		ft_getdirstats(&tree->file, tree->file->name, *flags);
 		if (tree->right)
 			ft_computeargs(tree->right, flags);
 	}
+}
+
+int				ft_init_flags(t_flags **flags)
+{
+	if (!(*flags = malloc(sizeof(t_flags))))
+		return (-1);
+	(*flags)->arg = 0;
+	(*flags)->l = 0;
+	(*flags)->a = 0;
+	(*flags)->r = 0;
+	(*flags)->bigr = 0;
+	(*flags)->t = 0;
+	return (0);
 }
 
 int				main(int argc, char *argv[])
@@ -72,9 +89,8 @@ int				main(int argc, char *argv[])
 
 	tree = NULL;
 	i = 1;
-	if (!(flags = malloc(sizeof(t_flags))))
+	if (ft_init_flags(&flags) == -1)
 		return (-1);
-	flags->a = 0;
 	while (argv[i] && ft_getflags(&flags, argv[i]) == 1)
 		i++;
 	flags->arg = 0;
@@ -86,11 +102,41 @@ int				main(int argc, char *argv[])
 		file->total = 0;
 		file->subtree = NULL;
 		file->alphatime = NULL;
-		ft_getargs(&file, (i == argc ? "./" : argv[i]), NULL, 1);
+		ft_getargs(&file, (i == argc ? "./" : argv[i]));
 		ft_fill_tree(&file, &tree, flags);
 		i++;
 	}
 	ft_computeargs(tree, &flags);
-	free(flags);
+	ft_last_free(tree, file, flags);
 	return (0);
+}
+
+void		ft_last_free(t_tree *tree, t_file *file, t_flags *flags)
+{
+	free(flags);
+	free(tree);
+	free(file->name);
+	free(file->path);
+	free(file);
+}
+
+void		ft_free_node(t_tree **node)
+{
+	if ((*node)->file->subtree)
+		ft_free_tree(&(*node)->file->subtree);
+	if ((*node)->file->alphatime)
+		ft_free_tree(&(*node)->file->alphatime);
+	ft_strdel(&(*node)->file->name);
+	ft_strdel(&(*node)->file->path);
+	free((*node)->file);
+	free(*node);
+}
+
+void		ft_free_tree(t_tree **tree)
+{
+	if ((*tree)->left)
+		ft_free_tree(&(*tree)->left);
+	if ((*tree)->right)
+		ft_free_tree(&(*tree)->right);
+	ft_free_node(tree);
 }
