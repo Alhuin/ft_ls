@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/14 13:47:11 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/06 18:02:35 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/06 19:57:34 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -16,6 +16,7 @@
 int				ft_createnode(t_file **file, t_tree **tocreate)
 {
 	t_tree *node;
+
 	if (!(node = malloc(sizeof(t_tree))))
 		return (-1);
 	(*node).file = *file;
@@ -30,6 +31,7 @@ int				ft_createnode(t_file **file, t_tree **tocreate)
 int				ft_traddnode(t_file **file, t_tree **node)
 {
 	t_file *new = NULL;
+
 	if (*node == NULL)
 		return (ft_createnode(file, node));
 	else
@@ -38,7 +40,8 @@ int				ft_traddnode(t_file **file, t_tree **node)
 		{
 			if ((*node)->file->alphatime == NULL)
 			{
-				new = malloc(sizeof(t_file));
+				if (!(new = malloc(sizeof(t_file))))
+					return (-1);
 				new->name = ft_strdup((*node)->file->name);
 				new->path = ft_strdup((*node)->file->path);
 				new->sb = (*node)->file->sb;
@@ -71,6 +74,7 @@ int				ft_traddnode(t_file **file, t_tree **node)
 int				ft_taddnode(t_file **file, t_tree **node)
 {
 	t_file *new = NULL;
+
 	if (*node == NULL)
 		return (ft_createnode(file, node));
 	else
@@ -79,7 +83,8 @@ int				ft_taddnode(t_file **file, t_tree **node)
 		{
 			if ((*node)->file->alphatime == NULL)
 			{
-				new = malloc(sizeof(t_file));
+				if (!(new = malloc(sizeof(t_file))))
+					return (-1);
 				new->name = ft_strdup((*node)->file->name);
 				new->path = ft_strdup((*node)->file->path);
 				new->sb = (*node)->file->sb;

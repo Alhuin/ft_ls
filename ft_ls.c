@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/13 16:17:24 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/06 18:02:41 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/06 19:32:30 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -44,7 +44,8 @@ static int		ft_getflags(t_flags **flags, char *arg)
 int				ft_getargs(t_file **file, char *arg)
 {
 	(*file)->arg = 1;
-	(*file)->path = ft_strjoin("./", arg);
+	if (!((*file)->path = ft_strjoin("./", arg)))
+		return (-1);
 	if (!((*file)->name = ft_strdup(arg)))
 		return (-1);
 	lstat((*file)->path, &(*file)->sb);
@@ -61,7 +62,13 @@ void	ft_computeargs(t_tree *tree, t_flags **flags)
 			ft_computeargs(tree->file->alphatime, flags);
 		if (tree->file->subtree != NULL)
 			ft_computeargs(tree->file->subtree, flags);
-		ft_getdirstats(&tree->file, tree->file->name, *flags);
+		if (S_ISDIR(tree->file->sb.st_mode))
+			ft_getdirstats(&tree->file, tree->file->name, *flags);
+		else
+		{
+			ft_print_name(tree, 0, *flags);
+			ft_printf("\n");
+		}
 		if (tree->right)
 			ft_computeargs(tree->right, flags);
 	}
@@ -89,7 +96,7 @@ void			ft_recursive(t_tree *tree, t_flags **flags)
 		ft_recursive(tree->file->alphatime, flags);
 	if (S_ISDIR(tree->file->sb.st_mode) && (tree->file->name[0] != '.' || (*flags)->a == 1))
 	{
-		if (ft_getdirstats(&tree->file, tree->file->path, *flags) != -1)
+		if (ft_getdirstats(&tree->file, tree->file->path, *flags) == 0)
 			ft_recursive(tree->file->subtree, flags);
 	}
 	if (tree->right)
@@ -117,7 +124,8 @@ int				main(int argc, char *argv[])
 		file->total = 0;
 		file->subtree = NULL;
 		file->alphatime = NULL;
-		ft_getargs(&file, (i == argc ? "./" : argv[i]));
+		if (ft_getargs(&file, (i == argc ? "./" : argv[i])) == -1)
+			return (-1);
 		ft_fill_tree(&file, &tree, flags);
 		i++;
 	}
