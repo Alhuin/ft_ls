@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/13 16:17:24 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/06 17:21:26 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/06 18:02:41 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -71,6 +71,7 @@ int				ft_init_flags(t_flags **flags)
 {
 	if (!(*flags = malloc(sizeof(t_flags))))
 		return (-1);
+	(*flags)->elem = 0;
 	(*flags)->arg = 0;
 	(*flags)->l = 0;
 	(*flags)->a = 0;
@@ -82,7 +83,6 @@ int				ft_init_flags(t_flags **flags)
 
 void			ft_recursive(t_tree *tree, t_flags **flags)
 {
-//	dprintf(1, "file name = %s\n", tree->file->name);
 	if (tree->left)
 		ft_recursive(tree->left, flags);
 	if (tree->file->alphatime != NULL)
@@ -94,7 +94,6 @@ void			ft_recursive(t_tree *tree, t_flags **flags)
 	}
 	if (tree->right)
 		ft_recursive(tree->right, flags);
-
 }
 
 int				main(int argc, char *argv[])

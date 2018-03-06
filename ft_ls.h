@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/14 13:47:30 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/06 15:43:00 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/06 18:02:26 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -44,6 +44,7 @@ typedef struct		s_file
 typedef struct		s_flags
 {
 	int				arg;
+	int				elem;
 	int				l;
 	int				a;
 	int				r;
