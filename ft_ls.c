@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/13 16:17:24 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/02/28 16:45:54 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/06 12:13:43 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -91,5 +91,6 @@ int				main(int argc, char *argv[])
 		i++;
 	}
 	ft_computeargs(tree, &flags);
+	free(flags);
 	return (0);
 }
