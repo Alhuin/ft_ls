@@ -97,7 +97,7 @@ int		ft_getdirstats(t_file **file, char *path, t_flags *flags)
 	lengh = 0;
 	rep = opendir(path);
 	if (rep == NULL)
-		return (ft_printf("ft_ls: %s: %s\n", (*file)->name, strerror(errno)));
+		return (-1);
 	while ((fichierlu = readdir(rep)) != NULL)
 	{
 		ft_subfile_init(&subfile, lengh, path, fichierlu->d_name);
@@ -108,12 +108,12 @@ int		ft_getdirstats(t_file **file, char *path, t_flags *flags)
 		ft_fill_tree(&subfile, &(*file)->subtree, flags);
 	}
 	if (closedir(rep) == -1)
-		return (ft_printf("ft_ls: %s: %s\n", (*file)->name, strerror(errno)));
+		return (-1);
 	if (flags->elem > 1 || flags->bigr != 1)
-		ft_printf("%s:\n", (flags->bigr == 1 ? (*file)->path : (*file)->name));
+		ft_printf("\n%s:\n", (flags->bigr == 1 ? (*file)->path : (*file)->name));
 	if (flags->l == 1)
 		ft_printf("total %d\n", (*file)->total);
 	ft_print_tree((*file)->subtree, lengh + 1, flags);
-	ft_printf(flags->l == 1 ? "\n" : "\n\n");
+	ft_printf(flags->l == 1 ? "\n\n" : "\n");
 	return (0);
 }

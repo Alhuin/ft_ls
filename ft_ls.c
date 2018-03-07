@@ -41,14 +41,17 @@ static int		ft_getflags(t_flags **flags, char *arg)
 	return (0);
 }
 
-int				ft_getargs(t_file **file, char *arg)
+int				ft_getargs(t_file **file, t_tree **tree, t_tree ** errors, t_flags *flags)
 {
-	(*file)->arg = 1;
-	if (!((*file)->path = ft_strjoin("./", arg)))
-		return (-1);
-	if (!((*file)->name = ft_strdup(arg)))
-		return (-1);
-	lstat((*file)->path, &(*file)->sb);
+	if (lstat((*file)->path, &(*file)->sb) == -1)
+	{
+		(*file)->error = ft_strdup(strerror(errno));
+			ft_erraddnode(file, errors);
+	}
+	else if (S_ISDIR((*file)->sb.st_mode) == 0)
+		ft_erraddnode(file, errors);
+	else
+		ft_fill_tree(file, tree, flags);
 	return (0);
 }
 
@@ -62,13 +65,8 @@ void	ft_computeargs(t_tree *tree, t_flags **flags)
 			ft_computeargs(tree->file->alphatime, flags);
 		if (tree->file->subtree != NULL)
 			ft_computeargs(tree->file->subtree, flags);
-		if (S_ISDIR(tree->file->sb.st_mode))
+		if (tree->file->error == NULL)
 			ft_getdirstats(&tree->file, tree->file->name, *flags);
-		else
-		{
-			ft_print_name(tree, 0, *flags);
-			ft_printf("\n");
-		}
 		if (tree->right)
 			ft_computeargs(tree->right, flags);
 	}
@@ -103,14 +101,28 @@ void			ft_recursive(t_tree *tree, t_flags **flags)
 		ft_recursive(tree->right, flags);
 }
 
+void			ft_print_errors(t_tree *errors)
+{
+	if (errors->left)
+		ft_print_errors(errors->left);
+	if (errors->file->error == NULL)
+		ft_printf("%s ", errors->file->name);
+	else
+		ft_printf("ft_ls: %s: %s\n", errors->file->name, errors->file->error);
+	if (errors->right)
+		ft_print_errors(errors->right);
+}
+
 int				main(int argc, char *argv[])
 {
 	t_flags		*flags;
 	t_tree		*tree;
+	t_tree		*errors;
 	t_file		*file;
 	int			i;
 
 	tree = NULL;
+	errors = NULL;
 	i = 1;
 	if (ft_init_flags(&flags) == -1)
 		return (-1);
@@ -122,13 +134,26 @@ int				main(int argc, char *argv[])
 		if (!(file = malloc(sizeof(t_file))))
 			return (-1);
 		file->total = 0;
+		file->error = NULL;
 		file->subtree = NULL;
 		file->alphatime = NULL;
-		if (ft_getargs(&file, (i == argc ? "./" : argv[i])) == -1)
-			return (-1);
-		ft_fill_tree(&file, &tree, flags);
+		file->arg = 1;
+		if (i == argc)
+		{
+			if (!(file->path = ft_strdup("./")))
+				return (-1);
+		}
+		else
+			if (!(file->path = ft_strjoin("./", argv[i])))
+				return (-1);
+		if (i < argc)
+			if (!(file->name = ft_strdup(argv[i])))
+				return (-1);
+		ft_getargs(&file, &tree, &errors, flags);
 		i++;
 	}
+	if (errors)
+		ft_print_errors(errors);
 	ft_computeargs(tree, &flags);
 	if (flags->bigr == 1)
 		ft_recursive(tree->file->subtree, &flags);

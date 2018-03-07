@@ -136,6 +136,44 @@ int				ft_addnode(t_file **file, t_tree **node)
 	return (0);
 }
 
+int				ft_erraddnode(t_file **file, t_tree **node)
+{
+	if (*node == NULL)
+		return (ft_createnode(file, node));
+	else
+	{
+		if ((*file)->error != NULL && (*node)->file->error == NULL)
+		{
+			if ((*node)->left)
+				ft_erraddnode(file, &(*node)->left);
+			else
+				return (ft_createnode(file, &(*node)->left));
+		}
+		else if ((*file)->error == NULL && (*node)->file->error != NULL)
+		{
+			if ((*node)->right)
+				ft_erraddnode(file, &(*node)->right);
+			else
+				return (ft_createnode(file, &(*node)->right));
+		}
+		else if (ft_strcmp((*file)->name, (*node)->file->name) > 0)
+		{
+			if ((*node)->right)
+				ft_erraddnode(file, &(*node)->right);
+			else
+				return (ft_createnode(file, &(*node)->right));
+		}
+		else if (ft_strcmp((*file)->name, (*node)->file->name) < 0)
+		{
+			if ((*node)->left)
+				ft_erraddnode(file, &(*node)->left);
+			else
+				return (ft_createnode(file, &(*node)->left));
+		}
+	}
+	return (0);
+}
+
 int				ft_raddnode(t_file **file, t_tree **node)
 {
 	if (*node == NULL)

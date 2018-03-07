@@ -32,6 +32,7 @@ typedef struct		s_tree
 typedef struct		s_file
 {
 	struct stat		sb;
+	char			*error;
 	int				arg;
 	int				exec;
 	int				total;
@@ -69,4 +70,5 @@ void				ft_free_node(t_tree **node);
 void				ft_free_tree(t_tree **tree);
 void				ft_last_free(t_tree *tree, t_file *file, t_flags *flags);
 void				ft_compute_rargs(t_tree *tree, t_flags **flags);
+int					ft_erraddnode(t_file **file, t_tree **node);
 #endif
