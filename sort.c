@@ -23,7 +23,7 @@ int			rev_time_sort(t_file *to_sort, t_file *node)
 	return (to_sort->sb.st_mtime - node->sb.st_mtime);
 }
 
-/*
+
 int			err_sort(t_file *to_sort, t_file *node)
 {
 	if (!(to_sort->error) && node->error)
@@ -33,5 +33,3 @@ int			err_sort(t_file *to_sort, t_file *node)
 	else
 		return (0);
 }
-*/
-

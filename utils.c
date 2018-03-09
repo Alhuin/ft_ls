@@ -61,15 +61,17 @@ char	*ft_buildpath(char *arg, char *name)
 	return (ret);
 }
 
-int		ft_fill_tree(t_file **file, t_tree **tree, t_flags *flags)
+int		ft_fill_tree(t_file **file, t_tree **tree, t_flags *flags, int error)
 {
 	int (*ascii)(t_file*, t_file*) = ascii_sort;
 	int (*rascii)(t_file*, t_file*) = rev_ascii_sort;
 	int (*time)(t_file*, t_file*) = time_sort;
 	int (*rtime)(t_file*, t_file*) = rev_time_sort;
-//	int (*err)(t_file*, t_file*) = err_sort;
+	int (*err)(t_file*, t_file*) = err_sort;
 
-	if (flags->t == 1 && flags->r != 1)
+	if (error == 1)
+		ft_double_sort(file, tree, err, ascii);
+	else if (flags->t == 1 && flags->r != 1)
 		ft_double_sort(file, tree, time, ascii);
 	else if (flags->t == 1 && flags->r == 1)
 		ft_double_sort(file, tree, rtime, rascii);
@@ -111,7 +113,7 @@ int		ft_getdirstats(t_file **file, char *path, t_flags *flags)
 			lengh = (int)ft_strlen(subfile->name);
 		if (flags->l == 1)
 			(*file)->total += subfile->sb.st_blocks;
-		ft_fill_tree(&subfile, &(*file)->subtree, flags);
+		ft_fill_tree(&subfile, &(*file)->subtree, flags, 0);
 	}
 	if (closedir(rep) == -1)
 		return (ft_printf("ft_ls: %s: %s\n", (*file)->name, strerror(errno)));

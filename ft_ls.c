@@ -41,34 +41,16 @@ static int		ft_getflags(t_flags **flags, char *arg)
 	return (0);
 }
 
-int				ft_getargs(t_file **file, char *arg)
-{
-	(*file)->arg = 1;
-	if (!((*file)->path = ft_strjoin("./", arg)))
-		return (-1);
-	if (!((*file)->name = ft_strdup(arg)))
-		return (-1);
-	lstat((*file)->path, &(*file)->sb);
-	return (0);
-}
-
 void	ft_computeargs(t_tree *tree, t_flags **flags)
 {
 	if (tree != NULL)
 	{
 		if (tree->left)
 			ft_computeargs(tree->left, flags);
-		if (tree->file->alphatime != NULL)
-			ft_computeargs(tree->file->alphatime, flags);
 		if (tree->file->subtree != NULL)
 			ft_computeargs(tree->file->subtree, flags);
 		if (S_ISDIR(tree->file->sb.st_mode))
 			ft_getdirstats(&tree->file, tree->file->name, *flags);
-		else
-		{
-			ft_print_name(tree, 0, *flags);
-			ft_printf("\n");
-		}
 		if (tree->right)
 			ft_computeargs(tree->right, flags);
 	}
@@ -92,9 +74,8 @@ void			ft_recursive(t_tree *tree, t_flags **flags)
 {
 	if (tree->left)
 		ft_recursive(tree->left, flags);
-	if (tree->file->alphatime != NULL)
-		ft_recursive(tree->file->alphatime, flags);
-	if (S_ISDIR(tree->file->sb.st_mode) && (tree->file->name[0] != '.' || (*flags)->a == 1))
+	if (S_ISDIR(tree->file->sb.st_mode) && (tree->file->name[0] != '.' ||
+		(*flags)->a == 1))
 	{
 		if (ft_getdirstats(&tree->file, tree->file->path, *flags) == 0)
 			ft_recursive(tree->file->subtree, flags);
@@ -108,8 +89,10 @@ int				main(int argc, char *argv[])
 	t_flags		*flags;
 	t_tree		*tree;
 	t_file		*file;
+	t_tree		*errors;
 	int			i;
 
+	errors = NULL;
 	tree = NULL;
 	i = 1;
 	if (ft_init_flags(&flags) == -1)
@@ -123,26 +106,68 @@ int				main(int argc, char *argv[])
 			return (-1);
 		file->total = 0;
 		file->subtree = NULL;
-		file->alphatime = NULL;
-		if (ft_getargs(&file, (i == argc ? "./" : argv[i])) == -1)
-			return (-1);
-		ft_fill_tree(&file, &tree, flags);
+		file->arg = 1;
+		file->error = NULL;
+		if (i == argc)
+		{
+			if (!(file->path = ft_strdup("./")))
+				return (-1);
+			if (!(file->name = ft_strdup(".")))
+				return (-1);
+		}
+		else
+		{
+			if (!(file->path = ft_strjoin("./", argv[i])))
+				return (-1);
+			if (!(file->name = ft_strdup(argv[i])))
+				return (-1);
+		}
+		if (lstat(file->path, &file->sb) == -1)
+		{
+			file->error = ft_strdup(strerror(errno));
+			ft_fill_tree(&file, &errors, flags, 1);
+		}
+		else if (S_ISDIR(file->sb.st_mode) == 0)
+			ft_fill_tree(&file, &errors, flags, 1);
+		else
+			ft_fill_tree(&file, &tree, flags, 0);
 		i++;
+	}
+	if (errors)
+	{
+		ft_print_errors(errors, flags);
+		ft_printf("\n");
 	}
 	ft_computeargs(tree, &flags);
 	if (flags->bigr == 1)
 		ft_recursive(tree->file->subtree, &flags);
-	ft_free_tree(&tree);
+	if (tree)
+		ft_free_tree(&tree);
+	if (errors)
+		ft_free_tree(&errors);
 	free(flags);
 	return (0);
+}
+
+void		ft_print_errors(t_tree *tree, t_flags *flags)
+{
+	if (tree->left)
+		ft_print_errors(tree->left, flags);
+	if (tree->file->error)
+	{
+		ft_printf("ft_ls: %s: %s\n", tree->file->name, tree->file->error);
+		ft_strdel(&tree->file->error);
+	}
+	else
+		ft_print_name(tree, 0, flags);
+	if (tree->right)
+		ft_print_errors(tree->right, flags);
 }
 
 void		ft_free_node(t_tree **node)
 {
 	if ((*node)->file->subtree)
 		ft_free_tree(&(*node)->file->subtree);
-	if ((*node)->file->alphatime)
-		ft_free_tree(&(*node)->file->alphatime);
 	ft_strdel(&(*node)->file->name);
 	ft_strdel(&(*node)->file->path);
 	free((*node)->file);

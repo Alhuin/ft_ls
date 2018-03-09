@@ -39,19 +39,22 @@ void		ft_print_tree(t_tree *tree, int lengh, t_flags *flags)
 	{
 		if (tree->left)
 			ft_print_tree(tree->left, lengh, flags);
-		if (tree->file->alphatime == NULL)
-			ft_print_name(tree, lengh, flags);
-		else
-			ft_print_tree(tree->file->alphatime, lengh, flags);
+		ft_print_name(tree, lengh, flags);
 		if (tree->right)
 			ft_print_tree(tree->right, lengh, flags);
 	}
 }
 
-void		ft_print_date(char *time, char *str)
+int			ft_print_date(char *time, char *str)
 {
 	int i;
+//	char *mtime;
+//	char *tmp;
 
+//	tmp = NULL;
+//	if (!(mtime = ft_strdup(time)))
+//		return (-1);
+//	tmp = mtime;
 	i = 0;
 	while (str[i])
 	{
@@ -63,25 +66,28 @@ void		ft_print_date(char *time, char *str)
 			ft_printf("%6.5s", time + 11);
 		i++;
 	}
+//	ft_strdel(&tmp);
+	return (0);
 }
 
 int			ft_printl(t_file **file, t_flags **flags)
 {
 	struct group	*grp;
 	struct passwd	*pwd;
-	char			*time;
+	char			*perms;
 
 	if ((*file)->name[0] != '.' || (*flags)->a == 1)
 	{
-		ft_printf("%s", ft_get_perms((*file)->sb.st_mode));
+		perms = ft_get_perms((*file)->sb.st_mode);
+		ft_printf("%s", perms);
+		ft_strdel(&perms);
 		ft_printf("%3ld", (*file)->sb.st_nlink);
 		grp = getgrgid((*file)->sb.st_gid);
 		pwd = getpwuid((*file)->sb.st_uid);
 		ft_printf("%7s", pwd->pw_name);
 		ft_printf("%9s", grp->gr_name);
 		ft_printf("%8lld", (*file)->sb.st_size);
-		time = ctime(&(*file)->sb.st_mtime);
-		ft_print_date(time, "MDH");
+		ft_print_date(ctime(&(*file)->sb.st_mtime), "MDH");
 		if (S_ISDIR((*file)->sb.st_mode))
 			ft_printf(" {bcyan}%s{eoc}\n", (*file)->name);
 		else if ((*file)->sb.st_mode & S_IXUSR)

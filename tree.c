@@ -22,7 +22,6 @@ int				ft_createnode(t_file **file, t_tree **tocreate)
 	(*node).file = *file;
 	node->left = NULL;
 	node->right = NULL;
-	(*file)->alphatime = NULL;
 	(*file)->subtree = NULL;
 	*tocreate = node;
 	return (0);
