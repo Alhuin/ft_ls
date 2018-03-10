@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/14 13:47:11 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/06 19:57:34 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/10 15:31:49 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -75,12 +75,17 @@ int			ft_double_sort(t_file **file, t_tree **node, int(*f1)(), int(*f2)())
 
 void		ft_free_node(t_tree **node)
 {
-	if ((*node)->file->subtree)
-		ft_free_tree(&(*node)->file->subtree);
-	ft_strdel(&(*node)->file->name);
-	ft_strdel(&(*node)->file->path);
-	free((*node)->file);
+	if ((*node)->file->name)
+		ft_strdel(&(*node)->file->name);
+	if ((*node)->file->path)
+		ft_strdel(&(*node)->file->path);
+	if ((*node)->file)
+	{
+		free((*node)->file);
+		(*node)->file = NULL;
+	}
 	free(*node);
+	*node = NULL;
 }
 
 void		ft_free_tree(t_tree **tree)
@@ -89,5 +94,8 @@ void		ft_free_tree(t_tree **tree)
 		ft_free_tree(&(*tree)->left);
 	if ((*tree)->right)
 		ft_free_tree(&(*tree)->right);
-	ft_free_node(tree);
+	if ((*tree)->file->subtree)
+		ft_free_tree(&(*tree)->file->subtree);
+	if (*tree)
+		ft_free_node(tree);
 }

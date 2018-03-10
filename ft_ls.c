@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/13 16:17:24 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/06 19:32:30 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/10 15:26:20 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -73,9 +73,15 @@ static void			ft_print(t_tree *errors, t_tree *tree, t_flags *flags)
 static int		ft_free(t_tree **errors, t_tree **tree, t_flags **flags)
 {
 	if (*tree)
+	{
+		dprintf(1, "free tree\n");
 		ft_free_tree(&(*tree));
+	}
 	if (*errors)
+	{
+		dprintf(1, "free errors\n");
 		ft_free_tree(&(*errors));
+	}
 	free(*flags);
 	return (-1);
 }
@@ -106,5 +112,3 @@ int				main(int argc, char *argv[])
 	ft_free(&errors, &tree, &flags);
 	return (0);
 }
-
-

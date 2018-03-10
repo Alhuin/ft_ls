@@ -29,8 +29,12 @@ int				ft_init_file(t_flags **flags, t_file **file, int i, char *arg)
 	}
 	else
 	{
-		(*file)->path = ft_strjoin("./", arg);
+		if (arg[0] == '/')
+			(*file)->path = ft_strdup(arg);
+		else
+			(*file)->path = ft_strjoin("./", arg);
 		(*file)->name = ft_strdup(arg);
+		dprintf(1, "name = %p,\npath = %p\n", (*file)->name, (*file)->path);
 	}
 	if (!(*file)->path || !(*file)->name)
 		return (-1);
