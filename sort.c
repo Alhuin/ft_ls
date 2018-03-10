@@ -20,7 +20,10 @@ int			time_sort(t_file *to_sort, t_file *node)
 
 int			rev_time_sort(t_file *to_sort, t_file *node)
 {
-	return (to_sort->sb.st_mtime - node->sb.st_mtime);
+	if (to_sort->sb.st_mtimespec.tv_sec == node->sb.st_mtimespec.tv_sec)
+        return (to_sort->sb.st_mtimespec.tv_nsec - node->sb.st_mtimespec.tv_nsec);
+    else
+        return (to_sort->sb.st_mtimespec.tv_sec - node->sb.st_mtimespec.tv_sec);
 }
 
 

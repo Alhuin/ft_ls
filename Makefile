@@ -15,7 +15,7 @@
 
 NAME = ft_ls
 
-FILES_LS = ft_ls.c tree.c utils.c print.c sort.c
+FILES_LS = ft_ls.c tree.c utils.c utils2.c print.c sort.c
 
 PATH_LIBFT = ./Libft/
 
@@ -36,7 +36,7 @@ FLAGS = -Wall -Wextra -Werror -g
 all: $(NAME)
 
 $(NAME): $(NAME_LIBFT) $(SRCO_LS)
-	gcc $(FLAGS) $(SRCO_LS) -o $(NAME) -L $(PATH_LIBFT) -lft
+	gcc $(FLAGS) $(SRC_LS) -o $(NAME) $(NAME_LIBFT)
 	
 	@echo "\033[2J"
 	@echo "\033[1;93m"

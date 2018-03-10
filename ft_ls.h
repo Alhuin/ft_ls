@@ -43,7 +43,6 @@ typedef struct		s_file
 typedef struct		s_flags
 {
 	int				arg;
-	int				elem;
 	int				l;
 	int				a;
 	int				r;
@@ -74,4 +73,10 @@ int					ft_double_sort(t_file **file, t_tree **node, int(*f1)(),
 int					rev_time_sort(t_file *to_sort, t_file *node);
 void				ft_print_errors(t_tree *tree, t_flags *flags);
 void				ft_print_name(t_tree *tree, int lengh, t_flags *flags);
+int					ft_init_flags(t_flags **flags);
+int					ft_init_file(t_flags **flags, t_file **file, int i,
+						char *arg);
+void				ft_getfilestats(t_file **file, t_tree **errors,
+						t_tree **tree, t_flags *flags);
+char				*ft_uncap(char *str);
 #endif

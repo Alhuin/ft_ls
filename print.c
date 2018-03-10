@@ -15,18 +15,19 @@
 
 void		ft_print_name(t_tree *tree, int lengh, t_flags *flags)
 {
+	(void)lengh;
 	if (flags->l != 1)
 	{
 		if (tree->file->name[0] != '.' || flags->a == 1)
 		{
 			if (S_ISLNK(tree->file->sb.st_mode))
-				ft_printf("{magenta}%-*s{eoc}", lengh, tree->file->name);
+				ft_printf("{magenta}%s {eoc}", tree->file->name);
 			else if (S_ISDIR(tree->file->sb.st_mode))
-				ft_printf("{bcyan}%-*s{eoc}", lengh, tree->file->name);
+				ft_printf("{bcyan}%s {eoc}", tree->file->name);
 			else if (tree->file->sb.st_mode & S_IXUSR)
-				ft_printf("{red}%-*s{eoc}", lengh, tree->file->name);
+				ft_printf("{red}%s {eoc}", tree->file->name);
 			else
-				ft_printf("%-*s", lengh, tree->file->name);
+				ft_printf("%s ", tree->file->name);
 		}
 	}
 	else
@@ -45,28 +46,46 @@ void		ft_print_tree(t_tree *tree, int lengh, t_flags *flags)
 	}
 }
 
-int			ft_print_date(char *time, char *str)
+static int		ft_print_date(char *time)
 {
-	int i;
-//	char *mtime;
-//	char *tmp;
+	char *M;
+	char *D;
+	char *H;
 
-//	tmp = NULL;
-//	if (!(mtime = ft_strdup(time)))
-//		return (-1);
-//	tmp = mtime;
-	i = 0;
-	while (str[i])
+	H = ft_strsub(time, 11, 5);
+	D = ft_strsub(time, 8, 2);
+	M = ft_strsub(time, 4, 3);
+	if (!H || !D ||!M)
+		return (-1);
+	ft_printf("%3s", D);
+	ft_strdel(&D);
+	ft_printf("%4s", ft_uncap(M));
+	ft_strdel(&M);
+	ft_printf("%6s", H);
+	ft_strdel(&H);
+	return (0);
+}
+
+static int		ft_printl_name(t_file **file)
+{
+	char *buf;
+
+	buf = NULL;
+	if (S_ISLNK((*file)->sb.st_mode))
 	{
-		if (str[i] == 'M')
-			ft_printf("%4.3s", time + 4);
-		if (str[i] == 'D')
-			ft_printf("%3.2s", time + 8);
-		if (str[i] == 'H')
-			ft_printf("%6.5s", time + 11);
-		i++;
+		if (!(buf = malloc(sizeof(20))))
+			return (-1);
+		if (readlink((*file)->path, buf, 20) == -1)
+			return (-1);
+		ft_printf(" {magenta}%s{eoc} -> %s\n", (*file)->name, buf);
+		ft_strdel(&buf);
 	}
-//	ft_strdel(&tmp);
+	else if (S_ISDIR((*file)->sb.st_mode))
+		ft_printf(" {bcyan}%s{eoc}\n", (*file)->name);
+	else if ((*file)->sb.st_mode & S_IXUSR)
+		ft_printf(" {red}%s{eoc}\n", (*file)->name);
+	else
+		ft_printf(" %s\n", (*file)->name);
 	return (0);
 }
 
@@ -85,15 +104,11 @@ int			ft_printl(t_file **file, t_flags **flags)
 		grp = getgrgid((*file)->sb.st_gid);
 		pwd = getpwuid((*file)->sb.st_uid);
 		ft_printf("%7s", pwd->pw_name);
-		ft_printf("%9s", grp->gr_name);
-		ft_printf("%8lld", (*file)->sb.st_size);
-		ft_print_date(ctime(&(*file)->sb.st_mtime), "MDH");
-		if (S_ISDIR((*file)->sb.st_mode))
-			ft_printf(" {bcyan}%s{eoc}\n", (*file)->name);
-		else if ((*file)->sb.st_mode & S_IXUSR)
-			ft_printf(" {red}%s{eoc}\n", (*file)->name);
-		else
-			ft_printf(" %s\n", (*file)->name);
+		ft_printf("  %s", grp->gr_name);
+		ft_printf("%7lld", (*file)->sb.st_size);
+		if (ft_print_date(ctime(&(*file)->sb.st_mtime)) == -1)
+			return (-1);
+		ft_printl_name(file);
 	}
 	return (0);
 }

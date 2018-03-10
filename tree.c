@@ -13,7 +13,7 @@
 
 #include "ft_ls.h"
 
-int				ft_createnode(t_file **file, t_tree **tocreate)
+int		ft_createnode(t_file **file, t_tree **tocreate)
 {
 	t_tree *node;
 
@@ -71,4 +71,23 @@ int			ft_double_sort(t_file **file, t_tree **node, int(*f1)(), int(*f2)())
 				ft_createnode(file, &(*node)->left));
 	}
 	return (0);
+}
+
+void		ft_free_node(t_tree **node)
+{
+	if ((*node)->file->subtree)
+		ft_free_tree(&(*node)->file->subtree);
+	ft_strdel(&(*node)->file->name);
+	ft_strdel(&(*node)->file->path);
+	free((*node)->file);
+	free(*node);
+}
+
+void		ft_free_tree(t_tree **tree)
+{
+	if ((*tree)->left)
+		ft_free_tree(&(*tree)->left);
+	if ((*tree)->right)
+		ft_free_tree(&(*tree)->right);
+	ft_free_node(tree);
 }
