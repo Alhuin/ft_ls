@@ -6,14 +6,14 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/13 16:17:24 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/10 15:26:20 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/12 14:26:07 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-static int		ft_getflags(t_flags **flags, char *arg)
+static int			ft_getflags(t_flags **flags, char *arg)
 {
 	int i;
 
@@ -41,7 +41,6 @@ static int		ft_getflags(t_flags **flags, char *arg)
 	return (0);
 }
 
-
 static void			ft_recursive(t_tree *tree, t_flags **flags)
 {
 	if (tree->left)
@@ -61,32 +60,23 @@ static void			ft_recursive(t_tree *tree, t_flags **flags)
 static void			ft_print(t_tree *errors, t_tree *tree, t_flags *flags)
 {
 	if (errors)
-	{
 		ft_print_errors(errors, flags);
-		ft_printf("\n");
-	}
 	ft_computeargs(tree, &flags);
 	if (flags->bigr == 1)
 		ft_recursive(tree->file->subtree, &flags);
 }
 
-static int		ft_free(t_tree **errors, t_tree **tree, t_flags **flags)
+static int			ft_free(t_tree **errors, t_tree **tree, t_flags **flags)
 {
 	if (*tree)
-	{
-		dprintf(1, "free tree\n");
 		ft_free_tree(&(*tree));
-	}
 	if (*errors)
-	{
-		dprintf(1, "free errors\n");
 		ft_free_tree(&(*errors));
-	}
 	free(*flags);
 	return (-1);
 }
 
-int				main(int argc, char *argv[])
+int					main(int argc, char *argv[])
 {
 	t_flags		*flags;
 	t_tree		*tree;

@@ -6,14 +6,14 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/14 13:47:11 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/10 15:31:49 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/12 14:07:58 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-int		ft_createnode(t_file **file, t_tree **tocreate)
+int					ft_createnode(t_file **file, t_tree **tocreate)
 {
 	t_tree *node;
 
@@ -27,7 +27,7 @@ int		ft_createnode(t_file **file, t_tree **tocreate)
 	return (0);
 }
 
-int			ft_sort(t_file **file, t_tree **node, int(*fn)())
+int					ft_sort(t_file **file, t_tree **node, int (*fn)())
 {
 	if (*node == NULL)
 		return (ft_createnode(file, node));
@@ -51,7 +51,8 @@ int			ft_sort(t_file **file, t_tree **node, int(*fn)())
 	return (0);
 }
 
-int			ft_double_sort(t_file **file, t_tree **node, int(*f1)(), int(*f2)())
+int					ft_double_sort(t_file **file, t_tree **node, int (*f1)(),
+						int (*f2)())
 {
 	if (*node == NULL)
 		return (ft_createnode(file, node));
@@ -73,7 +74,7 @@ int			ft_double_sort(t_file **file, t_tree **node, int(*f1)(), int(*f2)())
 	return (0);
 }
 
-void		ft_free_node(t_tree **node)
+void				ft_free_node(t_tree **node)
 {
 	if ((*node)->file->name)
 		ft_strdel(&(*node)->file->name);
@@ -88,7 +89,7 @@ void		ft_free_node(t_tree **node)
 	*node = NULL;
 }
 
-void		ft_free_tree(t_tree **tree)
+void				ft_free_tree(t_tree **tree)
 {
 	if ((*tree)->left)
 		ft_free_tree(&(*tree)->left);

@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/27 19:10:55 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/10 15:46:11 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/12 14:28:42 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -41,14 +41,13 @@ char	*ft_buildpath(char *arg, char *name)
 	int		i;
 	int		slash;
 	char	*ret;
-	char	*tmp = NULL;
+	char	*tmp;
 
+	tmp = NULL;
 	slash = 0;
 	i = 0;
 	if (arg)
 	{
-		if (arg[0] == '/')
-			return (arg);
 		while (arg[i])
 			i++;
 		i--;
@@ -68,12 +67,17 @@ char	*ft_buildpath(char *arg, char *name)
 
 int		ft_fill_tree(t_file **file, t_tree **tree, t_flags *flags, int error)
 {
-	int (*ascii)(t_file*, t_file*) = ascii_sort;
-	int (*rascii)(t_file*, t_file*) = rev_ascii_sort;
-	int (*time)(t_file*, t_file*) = time_sort;
-	int (*rtime)(t_file*, t_file*) = rev_time_sort;
-	int (*err)(t_file*, t_file*) = err_sort;
+	int (*ascii)(t_file*, t_file*);
+	int (*rascii)(t_file*, t_file*);
+	int (*time)(t_file*, t_file*);
+	int (*rtime)(t_file*, t_file*);
+	int (*err)(t_file*, t_file*);
 
+	ascii = ascii_sort;
+	rascii = rev_ascii_sort;
+	time = time_sort;
+	rtime = rev_time_sort;
+	err = err_sort;
 	if (error == 1)
 		ft_double_sort(file, tree, err, ascii);
 	else if (flags->t == 1 && flags->r != 1)
@@ -99,7 +103,6 @@ int		ft_subfile_init(t_file **subfile, int lengh, char *path, char *name)
 	lstat((*subfile)->path, &(*subfile)->sb);
 	if (lengh < (int)ft_strlen((*subfile)->name))
 		lengh = (int)ft_strlen((*subfile)->name);
-
 	return (0);
 }
 
@@ -113,12 +116,7 @@ int		ft_getdirstats(t_file **file, char *path, t_flags *flags)
 	lengh = 0;
 	rep = opendir(path);
 	if (rep == NULL)
-	{
-		(*file)->error = ft_strdup(strerror(errno));
-		ft_printf("ft_ls: %s: %s\n", (*file)->name, (*file)->error);
-		ft_strdel(&(*file)->error);
-		return (-1);
-	}
+		ft_error((*file)->name, strerror(errno));
 	while ((fichierlu = readdir(rep)) != NULL)
 	{
 		ft_subfile_init(&subfile, lengh, path, fichierlu->d_name);
@@ -127,12 +125,7 @@ int		ft_getdirstats(t_file **file, char *path, t_flags *flags)
 		ft_fill_tree(&subfile, &(*file)->subtree, flags, 0);
 	}
 	if (rep == NULL || closedir(rep) == -1)
-	{
-		(*file)->error = ft_strdup(strerror(errno));
-		ft_printf("ft_ls: %s: %s\n", (*file)->name, (*file)->error);
-		ft_strdel(&(*file)->error);
-		return (-1);
-	}
+		ft_error((*file)->name, strerror(errno));
 	ft_printf("%s:\n", (flags->bigr == 1 ? (*file)->path : (*file)->name));
 	if (flags->l == 1)
 		ft_printf("total %d\n", (*file)->total);

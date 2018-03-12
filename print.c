@@ -6,14 +6,14 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/27 19:00:54 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/10 13:43:59 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/12 14:06:10 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void		ft_print_name(t_tree *tree, int lengh, t_flags *flags)
+void				ft_print_name(t_tree *tree, int lengh, t_flags *flags)
 {
 	(void)lengh;
 	if (flags->l != 1)
@@ -31,10 +31,10 @@ void		ft_print_name(t_tree *tree, int lengh, t_flags *flags)
 		}
 	}
 	else
-		ft_printl(&(tree->file),  &flags);
+		ft_printl(&(tree->file), &flags);
 }
 
-void		ft_print_tree(t_tree *tree, int lengh, t_flags *flags)
+void				ft_print_tree(t_tree *tree, int lengh, t_flags *flags)
 {
 	if (tree != NULL)
 	{
@@ -46,27 +46,27 @@ void		ft_print_tree(t_tree *tree, int lengh, t_flags *flags)
 	}
 }
 
-static int		ft_print_date(char *time)
+static int			ft_print_date(char *time)
 {
-	char *M;
-	char *D;
-	char *H;
+	char *m;
+	char *d;
+	char *h;
 
-	H = ft_strsub(time, 11, 5);
-	D = ft_strsub(time, 8, 2);
-	M = ft_strsub(time, 4, 3);
-	if (!H || !D ||!M)
+	h = ft_strsub(time, 11, 5);
+	d = ft_strsub(time, 8, 2);
+	m = ft_strsub(time, 4, 3);
+	if (!h || !d || !m)
 		return (-1);
-	ft_printf("%3s", D);
-	ft_strdel(&D);
-	ft_printf("%4s", ft_uncap(M));
-	ft_strdel(&M);
-	ft_printf("%6s", H);
-	ft_strdel(&H);
+	ft_printf("%3s", d);
+	ft_strdel(&d);
+	ft_printf("%4s", ft_uncap(m));
+	ft_strdel(&m);
+	ft_printf("%6s", h);
+	ft_strdel(&h);
 	return (0);
 }
 
-static int		ft_printl_name(t_file **file)
+static int			ft_printl_name(t_file **file)
 {
 	char buf[1024];
 
@@ -86,7 +86,7 @@ static int		ft_printl_name(t_file **file)
 	return (0);
 }
 
-int			ft_printl(t_file **file, t_flags **flags)
+int					ft_printl(t_file **file, t_flags **flags)
 {
 	struct group	*grp;
 	struct passwd	*pwd;

@@ -1,6 +1,19 @@
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   parse.c                                          .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/03/12 14:02:36 by jjanin-r     #+#   ##    ##    #+#       */
+/*   Updated: 2018/03/12 14:03:48 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
+
 #include "ft_ls.h"
 
-int				ft_init_flags(t_flags **flags)
+int			ft_init_flags(t_flags **flags)
 {
 	if (!(*flags = malloc(sizeof(t_flags))))
 		return (-1);
@@ -13,7 +26,7 @@ int				ft_init_flags(t_flags **flags)
 	return (0);
 }
 
-int				ft_init_file(t_flags **flags, t_file **file, int i, char *arg)
+int			ft_init_file(t_flags **flags, t_file **file, int i, char *arg)
 {
 	(*flags)->arg++;
 	if (!(*file = malloc(sizeof(t_file))))
@@ -34,14 +47,13 @@ int				ft_init_file(t_flags **flags, t_file **file, int i, char *arg)
 		else
 			(*file)->path = ft_strjoin("./", arg);
 		(*file)->name = ft_strdup(arg);
-		dprintf(1, "name = %p,\npath = %p\n", (*file)->name, (*file)->path);
 	}
 	if (!(*file)->path || !(*file)->name)
 		return (-1);
 	return (0);
 }
 
-void			ft_getfilestats(t_file **file, t_tree **errors, t_tree **tree, 
+void		ft_getfilestats(t_file **file, t_tree **errors, t_tree **tree,
 		t_flags *flags)
 {
 	if (lstat((*file)->path, &(*file)->sb) == -1)
@@ -54,8 +66,6 @@ void			ft_getfilestats(t_file **file, t_tree **errors, t_tree **tree,
 	else
 		ft_fill_tree(file, tree, flags, 0);
 }
-
-
 
 void		ft_print_errors(t_tree *tree, t_flags *flags)
 {
@@ -72,7 +82,7 @@ void		ft_print_errors(t_tree *tree, t_flags *flags)
 		ft_print_errors(tree->right, flags);
 }
 
-void	ft_computeargs(t_tree *tree, t_flags **flags)
+void		ft_computeargs(t_tree *tree, t_flags **flags)
 {
 	if (tree != NULL)
 	{
@@ -86,5 +96,3 @@ void	ft_computeargs(t_tree *tree, t_flags **flags)
 			ft_computeargs(tree->right, flags);
 	}
 }
-
-

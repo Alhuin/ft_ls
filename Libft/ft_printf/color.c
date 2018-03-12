@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/01/29 14:00:54 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/06 12:29:08 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/12 14:00:44 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -109,7 +109,7 @@ int				ft_colorlen(char *str)
 					ret += 2;
 				j++;
 			}
-		ft_strdel(&check);
+			ft_strdel(&check);
 		}
 		i++;
 	}
@@ -122,7 +122,6 @@ char			*ft_color(char *str)
 	int		j;
 	char	*code;
 
-	j = 0;
 	i = 0;
 	while (str[i])
 	{
