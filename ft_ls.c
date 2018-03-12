@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/13 16:17:24 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/12 14:26:07 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/12 14:52:48 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -93,7 +93,7 @@ int					main(int argc, char *argv[])
 		i++;
 	while (i < argc || (i == argc && flags->arg == 0))
 	{
-		if (ft_init_file(&flags, &file, (i == argc ? 1 : 0), argv[i]) == -1)
+		if (ft_init_file(&file, (i == argc ? 1 : 0), argv[i]) == -1)
 			return (ft_free(&errors, &tree, &flags));
 		ft_getfilestats(&file, &errors, &tree, flags);
 		i++;

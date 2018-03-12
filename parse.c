@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/03/12 14:02:36 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/12 14:03:48 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/12 19:51:50 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -26,9 +26,8 @@ int			ft_init_flags(t_flags **flags)
 	return (0);
 }
 
-int			ft_init_file(t_flags **flags, t_file **file, int i, char *arg)
+int			ft_init_file(t_file **file, int i, char *arg)
 {
-	(*flags)->arg++;
 	if (!(*file = malloc(sizeof(t_file))))
 		return (-1);
 	(*file)->total = 0;
@@ -56,6 +55,7 @@ int			ft_init_file(t_flags **flags, t_file **file, int i, char *arg)
 void		ft_getfilestats(t_file **file, t_tree **errors, t_tree **tree,
 		t_flags *flags)
 {
+	flags->arg++;
 	if (lstat((*file)->path, &(*file)->sb) == -1)
 	{
 		(*file)->error = ft_strdup(strerror(errno));

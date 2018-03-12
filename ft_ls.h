@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/14 13:47:30 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/12 14:15:10 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/12 18:11:03 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -43,6 +43,7 @@ typedef struct		s_file
 typedef struct		s_flags
 {
 	int				arg;
+	int				elem;
 	int				l;
 	int				a;
 	int				r;
@@ -74,7 +75,7 @@ int					rev_time_sort(t_file *to_sort, t_file *node);
 void				ft_print_errors(t_tree *tree, t_flags *flags);
 void				ft_print_name(t_tree *tree, int lengh, t_flags *flags);
 int					ft_init_flags(t_flags **flags);
-int					ft_init_file(t_flags **flags, t_file **file, int i,
+int					ft_init_file(t_file **file, int i,
 						char *arg);
 void				ft_getfilestats(t_file **file, t_tree **errors,
 						t_tree **tree, t_flags *flags);
