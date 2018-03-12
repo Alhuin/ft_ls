@@ -6,7 +6,7 @@
 #    By: jmonneri <marvin@le-101.fr>                +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2018/03/12 15:43:27 by jmonneri     #+#   ##    ##    #+#        #
-#    Updated: 2018/03/12 16:32:45 by jmonneri    ###    #+. /#+    ###.fr      #
+#    Updated: 2018/03/12 16:55:28 by jmonneri    ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -34,7 +34,7 @@ LIBFT = $(PATH_LIBFT)$(NAME_LIBFT)
 #******************************************************************************#
 
 PATH_SRC_FT_LS = $(PATH_SRC)Ls/
-PATH_OBJ_FT_LS = $(PATH_SRC)Ls/
+PATH_OBJ_FT_LS = $(PATH_OBJ)Ls/
 FILES_FT_LS = ft_ls parse print sort tree utils utils2
 OBJ_FT_LS = $(addprefix $(PATH_OBJ_FT_LS), $(addsuffix .o, $(FILES_FT_LS)))
 SRC_FT_LS = $(addprefix $(PATH_SRC_FT_LS), $(addsuffix .c, $(FILES_FT_LS)))
@@ -55,7 +55,7 @@ FILES = $(FILES_FT_LS)
 all: $(NAME)
 
 $(NAME): $(LIBFT) $(PATHS_OBJ) $(OBJ_FT_LS)
-	@$(CC) $(CC_FLAGS) $(OBJ_FT_LS) -L $(PATH_LIBFT) -l ft -o $(NAME)
+	@$(CC) $(CC_FLAGS) $(OBJ) -L $(PATH_LIBFT) -l ft -o $(NAME)
 	@echo "\033[2J"
 	@echo "\033[1;93m"
 	@echo "            __.----.__"
@@ -90,7 +90,7 @@ $(PATH_OBJ_FT_LS)%.o: $(PATH_SRC_FT_LS)%.c $(INC)
 $(LIBFT):
 	@make -C $(PATH_LIBFT)
 
-$(PATH_OBJ):
+$(PATHS_OBJ):
 	@mkdir $@
 
 clean:
