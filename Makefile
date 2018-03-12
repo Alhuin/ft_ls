@@ -3,41 +3,59 @@
 #                                                               /              #
 #    Makefile                                         .::    .:/ .      .::    #
 #                                                  +:+:+   +:    +:  +:+:+     #
-#    By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+      #
+#    By: jmonneri <marvin@le-101.fr>                +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
-#    Created: 2017/12/21 18:36:09 by jjanin-r     #+#   ##    ##    #+#        #
-#    Updated: 2018/03/06 12:05:21 by jjanin-r    ###    #+. /#+    ###.fr      #
+#    Created: 2018/03/12 15:43:27 by jmonneri     #+#   ##    ##    #+#        #
+#    Updated: 2018/03/12 16:32:45 by jmonneri    ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
 
-.PHONY: re all clean fclean
+.PHONY: all clean fclean re
 
 NAME = ft_ls
+CC = gcc
+CC_FLAGS = -Wall -Wextra -Werror -g
+PATH_OBJ = ./objs/
+PATH_SRC = ./srcs/
+PATH_INC = ./incs/
+INC = $(addprefix $(PATH_INC), ft_ls.h)
 
-FILES_LS = ft_ls.c tree.c utils.c utils2.c print.c sort.c
+#******************************************************************************#
+#                                     LIBFT                                    #
+#******************************************************************************#
 
 PATH_LIBFT = ./Libft/
+NAME_LIBFT = libft.a
+LIBFT = $(PATH_LIBFT)$(NAME_LIBFT)
 
-NAME_LIBFT = $(PATH_LIBFT)libft.a
+#******************************************************************************#
+#                                     FT_LS                                    #
+#******************************************************************************#
 
-PATH_LS = ./
+PATH_SRC_FT_LS = $(PATH_SRC)Ls/
+PATH_OBJ_FT_LS = $(PATH_SRC)Ls/
+FILES_FT_LS = ft_ls parse print sort tree utils utils2
+OBJ_FT_LS = $(addprefix $(PATH_OBJ_FT_LS), $(addsuffix .o, $(FILES_FT_LS)))
+SRC_FT_LS = $(addprefix $(PATH_SRC_FT_LS), $(addsuffix .c, $(FILES_FT_LS)))
 
-INCS = -I $(PATH_LIBFT) -I $(PATH_LS)
+#******************************************************************************#
+#                                      ALL                                     #
+#******************************************************************************#
 
-SRC_LS = $(addprefix $(PATH_LS), $(FILES_LS))
+PATHS_OBJ = $(PATH_OBJ) $(PATH_OBJ_FT_LS)
+OBJ = $(OBJ_FT_LS)
+SRC = $(SRC_FT_LS)
+FILES = $(FILES_FT_LS)
 
-SRCO_LS = $(SRC_LS:.c=.o)
-
-HEADS = $(PATH_LIBFT)libft.h $(PATH_LS)ft_ls.h
-
-FLAGS = -Wall -Wextra -Werror -g
+#******************************************************************************#
+#                                     RULES                                    #
+#******************************************************************************#
 
 all: $(NAME)
 
-$(NAME): $(NAME_LIBFT) $(SRCO_LS)
-	gcc $(FLAGS) $(SRC_LS) -o $(NAME) $(NAME_LIBFT)
-	
+$(NAME): $(LIBFT) $(PATHS_OBJ) $(OBJ_FT_LS)
+	@$(CC) $(CC_FLAGS) $(OBJ_FT_LS) -L $(PATH_LIBFT) -l ft -o $(NAME)
 	@echo "\033[2J"
 	@echo "\033[1;93m"
 	@echo "            __.----.__"
@@ -64,22 +82,24 @@ $(NAME): $(NAME_LIBFT) $(SRCO_LS)
 	@echo "-------------------------------------------------------------------"
 	@echo "\033[m"
 
-%.o: %.c $(HEADS)
-	gcc $(FLAGS) -o $@ -c $< $(INCS)
+$(PATH_OBJ_FT_LS)%.o: $(PATH_SRC_FT_LS)%.c $(INC)
+	@printf %b "Compiling $@...                                             \r"
+	@$(CC) $(CC_FLAGS) -o $@ -c $< -I $(PATH_INC)
+	@printf %b "                                                            \r"
 
-$(NAME_LIBFT):
+$(LIBFT):
 	@make -C $(PATH_LIBFT)
 
-clean:
-	@rm -f $(SRCO_LS)
-	@make clean -C $(PATH_LIBFT)
-	@echo ""
-	@echo "\033[1;93m* -------------------- *"
-	@echo "|  \033[32mProject cleaned  !\033[1;93m  |"
-	@echo "* -------------------- *"
-	@echo "\033[m"
+$(PATH_OBJ):
+	@mkdir $@
 
-fclean: clean
-	@rm -f $(NAME) $(NAME_LIBFT)
+clean:
+	@rm -f $(PATH_OBJ)
+	@make -C clean $(PATH_LIBFT)
+
+fclean:
+	@rm -f $(NAME)
+	@rm -rf $(PATH_OBJ)
+	@make fclean -C $(PATH_LIBFT)
 
 re: fclean all
