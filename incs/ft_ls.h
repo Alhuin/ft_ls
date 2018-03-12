@@ -6,14 +6,14 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/14 13:47:30 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/12 18:11:03 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/12 21:01:38 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #ifndef FT_LS_H
 # define FT_LS_H
-# include "Libft/ft_libft/libft.h"
+# include "../Libft/ft_libft/libft.h"
 # include <sys/stat.h>
 # include <grp.h>
 # include <pwd.h>

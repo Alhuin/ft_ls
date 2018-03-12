@@ -6,7 +6,7 @@
 #    By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2017/12/21 18:36:09 by jjanin-r     #+#   ##    ##    #+#        #
-#    Updated: 2018/02/26 23:03:12 by jjanin-r    ###    #+. /#+    ###.fr      #
+#    Updated: 2018/03/12 16:29:58 by jmonneri    ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -63,7 +63,7 @@ FLAGS = -Wall -Wextra -Werror
 all: $(NAME)
 
 $(NAME): $(SRCO_PRINTF) $(SRCO_LIBFT)
-	ar rcs $(NAME) $(SRCO_PRINTF) $(SRCO_LIBFT)
+	@ar rcs $(NAME) $(SRCO_PRINTF) $(SRCO_LIBFT)
 	@echo ""
 	@echo "\033[1;93m* ----------------- *"
 	@echo "|  \033[32mLib compiled  !\033[1;93m  |"
@@ -71,8 +71,9 @@ $(NAME): $(SRCO_PRINTF) $(SRCO_LIBFT)
 	@echo "\033[m"
 
 %.o: %.c $(HEADS)
-	@gcc $(FLAGS) -c $< -o $@ -I $(PATH_PRINTF) -I $(PATH_LIBFT)
 	@printf %b "Compiling $@...                                             \r"
+	@gcc $(FLAGS) -c $< -o $@ -I $(PATH_PRINTF) -I $(PATH_LIBFT)
+	@printf %b "                                                            \r"
 
 clean:
 	@rm -f $(SRCO_PRINTF) $(SRCO_LIBFT)
