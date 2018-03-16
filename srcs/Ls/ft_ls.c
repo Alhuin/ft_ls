@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/13 16:17:24 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/12 14:52:48 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/16 15:24:30 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -62,7 +62,7 @@ static void			ft_print(t_tree *errors, t_tree *tree, t_flags *flags)
 	if (errors)
 		ft_print_errors(errors, flags);
 	ft_computeargs(tree, &flags);
-	if (flags->bigr == 1)
+	if (flags->bigr == 1 && tree->file->subtree)
 		ft_recursive(tree->file->subtree, &flags);
 }
 

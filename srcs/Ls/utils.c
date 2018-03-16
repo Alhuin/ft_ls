@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/27 19:10:55 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/12 20:01:08 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/16 15:23:09 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -116,7 +116,7 @@ int		ft_getdirstats(t_file **file, char *path, t_flags *flags)
 	lengh = 0;
 	rep = opendir(path);
 	if (rep == NULL)
-		return (ft_error((*file)->name, strerror(errno)));
+		return (ft_error(*file, strerror(errno), flags));
 	while ((fichierlu = readdir(rep)) != NULL)
 	{
 		ft_subfile_init(&subfile, lengh, path, fichierlu->d_name);
@@ -125,12 +125,12 @@ int		ft_getdirstats(t_file **file, char *path, t_flags *flags)
 		ft_fill_tree(&subfile, &(*file)->subtree, flags, 0);
 	}
 	if (rep == NULL || closedir(rep) == -1)
-		return (ft_error((*file)->name, strerror(errno)));
-	if (flags->arg > 1)
+		return (ft_error(*file, strerror(errno), flags));
+	if (flags->arg > 1 && flags->bigr != 1)
 		ft_printf("%s:\n", (flags->bigr == 1 ? (*file)->path : (*file)->name));
 	if (flags->l == 1)
 		ft_printf("total %d\n", (*file)->total);
 	ft_print_tree((*file)->subtree, lengh + 1, flags);
-	ft_printf(flags->l == 1 ? "\n" : "\n\n");
+	ft_printf("\n");
 	return (0);
 }

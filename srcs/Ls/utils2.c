@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/03/12 13:58:56 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/12 14:14:57 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/16 14:57:37 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -27,8 +27,10 @@ char		*ft_uncap(char *str)
 	return (str);
 }
 
-int			ft_error(char *name, char *error)
+int			ft_error(t_file *file, char *error, t_flags *flags)
 {
-	ft_printf("ft_ls: %s: %s\n", name, error);
+	if (flags->bigr == 1)
+		ft_printf("%s:\n", file->path, error);
+	ft_printf("ft_ls: %s: %s\n\n", file->name, error);
 	return (-1);
 }

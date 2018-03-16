@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/27 19:00:54 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/12 20:57:49 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/16 15:23:39 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -99,8 +99,7 @@ static int			ft_printl_name(t_file **file)
 
 int					ft_print_minmaj(t_file *file)
 {
-	ft_printf("%4d,%5d", file->sb.st_rdev >> 8 & 0x7f,
-			file->sb.st_rdev & 0xff);
+	ft_printf("%4d,%5d", major(file->sb.st_rdev), minor(file->sb.st_rdev));
 	return (0);
 }
 
@@ -124,7 +123,6 @@ int					ft_printl(t_file **file, t_flags **flags)
 		ft_printf("%10s", (pw ? pw : pwd->pw_name));
 		ft_strdel(&pw);
 		ft_printf("  %10s", grp->gr_name);
-//		ft_print_dateordev(*file)
 		((*file)->sb.st_rdev != 0 ? ft_print_minmaj(*file) :
 			ft_printf("%7lld", (*file)->sb.st_size));
 		if (ft_print_date((*file)->sb.st_mtime) == -1)

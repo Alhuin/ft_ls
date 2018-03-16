@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/14 13:47:30 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/12 21:01:38 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/16 14:51:54 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -80,5 +80,5 @@ int					ft_init_file(t_file **file, int i,
 void				ft_getfilestats(t_file **file, t_tree **errors,
 						t_tree **tree, t_flags *flags);
 char				*ft_uncap(char *str);
-int					ft_error(char *name, char *error);
+int					ft_error(t_file *file, char *error, t_flags *flags);
 #endif
