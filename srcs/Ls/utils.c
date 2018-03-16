@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/27 19:10:55 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/16 15:23:09 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/16 15:41:31 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -128,7 +128,7 @@ int		ft_getdirstats(t_file **file, char *path, t_flags *flags)
 		return (ft_error(*file, strerror(errno), flags));
 	if (flags->arg > 1 && flags->bigr != 1)
 		ft_printf("%s:\n", (flags->bigr == 1 ? (*file)->path : (*file)->name));
-	if (flags->l == 1)
+	if (flags->l == 1 && flags->un != 1)
 		ft_printf("total %d\n", (*file)->total);
 	ft_print_tree((*file)->subtree, lengh + 1, flags);
 	ft_printf("\n");

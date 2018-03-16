@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/27 19:00:54 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/16 15:23:39 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/16 15:39:23 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -15,8 +15,7 @@
 
 void				ft_print_name(t_tree *tree, int lengh, t_flags *flags)
 {
-//	dprintf(1, "lengh = ")
-	if (flags->l != 1)
+	if (flags->l != 1 || flags->un == 1)
 	{
 		if (tree->file->name[0] != '.' || flags->a == 1)
 		{
@@ -28,6 +27,8 @@ void				ft_print_name(t_tree *tree, int lengh, t_flags *flags)
 				ft_printf("{red}%-*s {eoc}", lengh, tree->file->name);
 			else
 				ft_printf("%-*s ", lengh, tree->file->name);
+			if (flags->un == 1)
+				ft_printf("\n");
 		}
 	}
 	else

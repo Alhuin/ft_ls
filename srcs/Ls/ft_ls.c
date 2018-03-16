@@ -6,12 +6,25 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/13 16:17:24 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/16 15:24:30 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/16 16:21:08 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+
+int					ft_print_help(t_flags **flags)
+{
+	char *line;
+	int fd;
+
+	(*flags)->help = 1;
+	fd = open("srcs/Ls/man.txt", O_RDONLY);
+	line = NULL;
+	while (get_next_line(fd, &line) > 0)
+		ft_printf("%s\n", line);
+	return (-1);
+}
 
 static int			ft_getflags(t_flags **flags, char *arg)
 {
@@ -24,8 +37,12 @@ static int			ft_getflags(t_flags **flags, char *arg)
 		{
 			if (arg[i] == 'l')
 				(*flags)->l = 1;
+			else if (ft_strcmp(arg + i, "-help") == 0)
+				return (ft_print_help(flags));
 			else if (arg[i] == 'a')
 				(*flags)->a = 1;
+			else if (arg[i] == '1')
+				(*flags)->un = 1;
 			else if (arg[i] == 'r')
 				(*flags)->r = 1;
 			else if (arg[i] == 'R')
@@ -91,6 +108,8 @@ int					main(int argc, char *argv[])
 		return (ft_free(&errors, &tree, &flags));
 	while (argv[i] && ft_getflags(&flags, argv[i]) == 1)
 		i++;
+	if (flags->help == 1)
+			return (ft_free(&errors, &tree, &flags));
 	while (i < argc || (i == argc && flags->arg == 0))
 	{
 		if (ft_init_file(&file, (i == argc ? 1 : 0), argv[i]) == -1)
