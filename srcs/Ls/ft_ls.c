@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/13 16:17:24 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/16 16:21:08 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/16 18:40:03 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -22,7 +22,11 @@ int					ft_print_help(t_flags **flags)
 	fd = open("srcs/Ls/man.txt", O_RDONLY);
 	line = NULL;
 	while (get_next_line(fd, &line) > 0)
+	{
 		ft_printf("%s\n", line);
+		ft_strdel(&line);
+	}
+	ft_strdel(&line);
 	return (-1);
 }
 
