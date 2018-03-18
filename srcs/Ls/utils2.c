@@ -6,18 +6,12 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/03/12 13:58:56 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/18 11:57:59 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/18 16:11:23 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "../../incs/ft_ls.h"
-
-int					ft_print_minmaj(t_file *file)
-{
-	ft_printf("%4d,%5d", major(file->sb.st_rdev), minor(file->sb.st_rdev));
-	return (0);
-}
 
 char				*ft_uncap(char *str)
 {
@@ -64,6 +58,15 @@ int					ft_checkflag(char c, t_flags **flags)
 		(*flags)->l = 1;
 	else if (c == 'a')
 		(*flags)->a = 1;
+	else if (c == 'f')
+	{
+		(*flags)->a = 1;
+		(*flags)->f = 1;
+	}
+	else if (c == 'u')
+		(*flags)->u = 1;
+	else if (c == 'd')
+		(*flags)->d = 1;
 	else if (c == '1')
 		(*flags)->un = 1;
 	else if (c == 'r')
@@ -75,4 +78,14 @@ int					ft_checkflag(char c, t_flags **flags)
 	else
 		return (-1);
 	return (1);
+}
+
+void				ft_addnode(t_file **file, t_tree **tree)
+{
+	if (*tree == NULL)
+		ft_createnode(file, tree);
+	else if ((*tree)->right)
+		ft_addnode(file, &(*tree)->right);
+	else
+		ft_createnode(file, &(*tree)->right);
 }

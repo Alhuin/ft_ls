@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/14 13:47:30 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/18 13:28:45 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/18 16:38:51 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -46,6 +46,9 @@ typedef struct		s_flags
 	int				elem;
 	int				un;
 	int				help;
+	int				f;
+	int				d;
+	int				u;
 	int				l;
 	int				a;
 	int				r;
@@ -68,7 +71,8 @@ void				ft_free_tree(t_tree **tree);
 void				ft_last_free(t_tree *tree, t_file *file, t_flags *flags);
 int					ascii_sort(t_file *to_sort, t_file *node);
 int					err_sort(t_file *to_sort, t_file *node);
-int					time_sort(t_file *to_sort, t_file *node);
+int					mtime_sort(t_file *to_sort, t_file *node);
+int					atime_sort(t_file *to_sort, t_file *node);
 int					ft_sort(t_file **file, t_tree **node, int(*fn)());
 int					rev_ascii_sort(t_file *to_sort, t_file *node);
 int					ft_double_sort(t_file **file, t_tree **node, int(*f1)(),
@@ -87,4 +91,8 @@ int					ft_print_help(t_flags **flags);
 int					ft_checkflag(char c, t_flags **flags);
 int					ft_print_minmaj(t_file *file);
 void				ft_recursive(t_tree *tree, t_flags **flags);
+int					atime_sort(t_file *to_sort, t_file *node);
+void				ft_addnode(t_file **file, t_tree **tree);
+void				ft_printperms(char *perms, t_file **file);
+char				*ft_firstperm(char *ret, mode_t mode);
 #endif

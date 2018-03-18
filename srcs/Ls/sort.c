@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/03/12 14:00:57 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/18 11:21:17 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/18 16:05:13 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -23,7 +23,7 @@ int			rev_ascii_sort(t_file *to_sort, t_file *node)
 	return (ft_strcmp(node->name, to_sort->name));
 }
 
-int			time_sort(t_file *to_sort, t_file *node)
+int			mtime_sort(t_file *to_sort, t_file *node)
 {
 	if (to_sort->sb.st_mtimespec.tv_sec == node->sb.st_mtimespec.tv_sec)
 		return (node->sb.st_mtimespec.tv_nsec -

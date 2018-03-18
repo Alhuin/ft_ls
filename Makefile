@@ -6,7 +6,7 @@
 #    By: jmonneri <marvin@le-101.fr>                +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2018/03/12 15:43:27 by jmonneri     #+#   ##    ##    #+#        #
-#    Updated: 2018/03/18 14:28:19 by jjanin-r    ###    #+. /#+    ###.fr      #
+#    Updated: 2018/03/18 16:06:19 by jjanin-r    ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -35,7 +35,7 @@ LIBFT = $(PATH_LIBFT)$(NAME_LIBFT)
 
 PATH_SRC_FT_LS = $(PATH_SRC)Ls/
 PATH_OBJ_FT_LS = $(PATH_OBJ)Ls/
-FILES_FT_LS = ft_ls parse print sort tree utils utils2
+FILES_FT_LS = ft_ls parse print sort tree utils utils2 utils3
 OBJ_FT_LS = $(addprefix $(PATH_OBJ_FT_LS), $(addsuffix .o, $(FILES_FT_LS)))
 SRC_FT_LS = $(addprefix $(PATH_SRC_FT_LS), $(addsuffix .c, $(FILES_FT_LS)))
 

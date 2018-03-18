@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/27 19:00:54 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/18 14:31:59 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/18 16:12:16 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -17,7 +17,8 @@ void				ft_print_name(t_tree *tree, t_flags *flags)
 {
 	if (flags->l != 1 || flags->un == 1)
 	{
-		if (tree->file->name[0] != '.' || flags->a == 1)
+		if (tree->file->name[0] != '.' || flags->a == 1 ||
+				ft_strncmp(tree->file->name, "../", 3) == 0)
 		{
 			if (S_ISLNK(tree->file->sb.st_mode))
 				ft_printf("{magenta}%-10s {eoc}", tree->file->name);
@@ -104,12 +105,11 @@ int					ft_printl(t_file **file, t_flags **flags)
 	char			*perms;
 
 	pw = NULL;
-	if ((*file)->name[0] != '.' || (*flags)->a == 1)
+	perms = NULL;
+	if ((*file)->name[0] != '.' || (*flags)->a == 1 ||
+			ft_strncmp((*file)->name, "../", 3) == 0)
 	{
-		perms = ft_get_perms((*file)->sb.st_mode);
-		ft_printf("%s", perms);
-		ft_strdel(&perms);
-		ft_printf("%3ld", (*file)->sb.st_nlink);
+		ft_printperms(perms, file);
 		grp = getgrgid((*file)->sb.st_gid);
 		if (!(pwd = getpwuid((*file)->sb.st_uid)))
 			pw = ft_itoa((*file)->sb.st_uid);
@@ -118,7 +118,8 @@ int					ft_printl(t_file **file, t_flags **flags)
 		ft_printf("  %10s", grp->gr_name);
 		((*file)->sb.st_rdev != 0 ? ft_print_minmaj(*file) :
 			ft_printf("%7lld", (*file)->sb.st_size));
-		if (ft_print_date((*file)->sb.st_mtime) == -1)
+		if (ft_print_date(((*flags)->u == 1 ? (*file)->sb.st_atime :
+						(*file)->sb.st_mtime)) == -1)
 			return (-1);
 		ft_printl_name(file);
 	}

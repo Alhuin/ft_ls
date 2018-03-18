@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/13 16:17:24 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/18 13:56:26 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/18 16:10:53 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -25,7 +25,13 @@ static int			ft_getflags(t_flags **flags, char *arg)
 			if (ft_strcmp(arg + i, "-help") == 0)
 				return (ft_print_help(flags));
 			else if (ft_checkflag(arg[i], flags) == -1)
+			{
+				ft_printf("ft_ls: illegal option -- %c\n", arg[i]);
+				ft_printf("usage: ./ft_ls [-alrRtufd1[-help]] [file ...]\n");
+				ft_printf("use --help for detailed usage\n");
+				(*flags)->help = 1;
 				return (-1);
+			}
 			i++;
 		}
 		return (1);
@@ -39,7 +45,10 @@ void				ft_recursive(t_tree *tree, t_flags **flags)
 		ft_recursive(tree->left, flags);
 	if (S_ISDIR(tree->file->sb.st_mode))
 	{
-		if ((ft_strncmp(tree->file->name, "../", 3) == 0) || (ft_strcmp(tree->file->name, "..") != 0 && ft_strcmp(tree->file->name, ".") != 0) || ((tree->file->name[0] != '.' || (*flags)->a == 1)))
+		if ((ft_strncmp(tree->file->name, "../", 3) == 0) ||
+				(ft_strcmp(tree->file->name, "..") != 0 &&
+				ft_strcmp(tree->file->name, ".") != 0) ||
+				((tree->file->name[0] != '.' || (*flags)->a == 1)))
 		{
 			if (tree->file->arg != 1)
 				ft_getdirstats(&tree->file, tree->file->path, *flags);
@@ -54,10 +63,11 @@ void				ft_recursive(t_tree *tree, t_flags **flags)
 static void			ft_print(t_tree *errors, t_tree *tree, t_flags *flags)
 {
 	if (errors)
+	{
 		ft_print_errors(errors, flags);
+		ft_printf("\n");
+	}
 	ft_computeargs(tree, &flags);
-//	if (flags->bigr == 1 && tree)
-//		ft_recursive(tree, &flags);
 }
 
 static int			ft_free(t_tree **errors, t_tree **tree, t_flags **flags)

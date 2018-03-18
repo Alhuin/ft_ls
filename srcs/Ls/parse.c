@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/03/12 14:02:36 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/18 13:29:03 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/18 16:07:21 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -61,7 +61,7 @@ void		ft_getfilestats(t_file **file, t_tree **errors, t_tree **tree,
 		(*file)->error = ft_strdup(strerror(errno));
 		ft_fill_tree(file, errors, flags, 1);
 	}
-	else if (S_ISDIR((*file)->sb.st_mode) == 0)
+	else if (S_ISDIR((*file)->sb.st_mode) == 0 || flags->d == 1)
 		ft_fill_tree(file, errors, flags, 1);
 	else
 		ft_fill_tree(file, tree, flags, 0);
@@ -77,10 +77,7 @@ void		ft_print_errors(t_tree *tree, t_flags *flags)
 		ft_strdel(&(tree->file->error));
 	}
 	else
-	{
 		ft_print_name(tree, flags);
-		ft_printf("\n");
-	}
 	if (tree->right)
 		ft_print_errors(tree->right, flags);
 }

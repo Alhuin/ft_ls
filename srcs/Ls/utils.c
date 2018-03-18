@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/27 19:10:55 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/18 14:27:11 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/18 16:34:26 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -20,16 +20,7 @@ char	*ft_get_perms(mode_t mode)
 	if (!(ret = malloc(sizeof(char) * 11)))
 		return (NULL);
 	ret[0] = '\0';
-	if (S_ISLNK(mode))
-		ft_strcat(ret, "l");
-	else if (S_ISCHR(mode))
-		ft_strcat(ret, "c");
-	else if (S_ISBLK(mode))
-		ft_strcat(ret, "b");
-	else if (S_ISFIFO(mode))
-		ft_strcat(ret, "p");
-	else
-		ft_strcat(ret, (S_ISDIR(mode) ? "d" : "-"));
+	ret = ft_firstperm(ret, mode);
 	ft_strcat(ret, ((mode & S_IRUSR) ? "r" : "-"));
 	ft_strcat(ret, ((mode & S_IWUSR) ? "w" : "-"));
 	ft_strcat(ret, ((mode & S_IXUSR) ? "x" : "-"));
@@ -75,27 +66,28 @@ char	*ft_buildpath(char *arg, char *name)
 
 int		ft_fill_tree(t_file **file, t_tree **tree, t_flags *flags, int error)
 {
-	int (*ascii)(t_file*, t_file*);
-	int (*rascii)(t_file*, t_file*);
-	int (*time)(t_file*, t_file*);
-	int (*rtime)(t_file*, t_file*);
-	int (*err)(t_file*, t_file*);
+	void *f[6];
 
-	ascii = ascii_sort;
-	rascii = rev_ascii_sort;
-	time = time_sort;
-	rtime = rev_time_sort;
-	err = err_sort;
+	f[0] = &ascii_sort;
+	f[1] = &rev_ascii_sort;
+	f[2] = &mtime_sort;
+	f[3] = &atime_sort;
+	f[4] = &rev_time_sort;
+	f[5] = &err_sort;
 	if (error == 1)
-		ft_double_sort(file, tree, err, ascii);
+		ft_double_sort(file, tree, f[5], f[0]);
+	else if (flags->f == 1)
+		ft_addnode(file, tree);
+	else if (flags->t == 1 && flags->r != 1 && flags->u == 1)
+		ft_double_sort(file, tree, f[3], f[0]);
 	else if (flags->t == 1 && flags->r != 1)
-		ft_double_sort(file, tree, time, ascii);
+		ft_double_sort(file, tree, f[2], f[0]);
 	else if (flags->t == 1 && flags->r == 1)
-		ft_double_sort(file, tree, rtime, rascii);
+		ft_double_sort(file, tree, f[4], f[1]);
 	else if (flags->r == 1 && flags->t != 1)
-		ft_sort(file, tree, rascii);
+		ft_sort(file, tree, f[1]);
 	else
-		ft_sort(file, tree, ascii);
+		ft_sort(file, tree, f[0]);
 	return (0);
 }
 
@@ -116,10 +108,8 @@ int		ft_getdirstats(t_file **file, char *path, t_flags *flags)
 	struct dirent	*fichierlu;
 	t_file			*subfile;
 
-	if (flags->bigr == 1)
-		flags->arg++;
-	rep = opendir(path);
-	if (rep == NULL)
+	flags->arg++;
+	if ((rep = opendir(path)) == NULL)
 		return (ft_error(*file, strerror(errno), flags));
 	while ((fichierlu = readdir(rep)) != NULL)
 	{
@@ -130,7 +120,7 @@ int		ft_getdirstats(t_file **file, char *path, t_flags *flags)
 	}
 	if (rep == NULL || closedir(rep) == -1)
 		return (ft_error(*file, strerror(errno), flags));
-	if (flags->bigr == 1 && flags->arg > 2)
+	if (flags->arg > 2)
 		ft_printf("%s:\n", (flags->bigr == 1 ? (*file)->path : (*file)->name));
 	if (flags->l == 1 && flags->un != 1)
 		ft_printf("total %d\n", (*file)->total);
