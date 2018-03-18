@@ -6,7 +6,7 @@
 #    By: jmonneri <marvin@le-101.fr>                +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2018/03/12 15:43:27 by jmonneri     #+#   ##    ##    #+#        #
-#    Updated: 2018/03/12 16:55:28 by jmonneri    ###    #+. /#+    ###.fr      #
+#    Updated: 2018/03/18 14:28:19 by jjanin-r    ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -15,7 +15,7 @@
 
 NAME = ft_ls
 CC = gcc
-CC_FLAGS = -Wall -Wextra -Werror -g
+CC_FLAGS = -Wall -Wextra -Werror
 PATH_OBJ = ./objs/
 PATH_SRC = ./srcs/
 PATH_INC = ./incs/
@@ -84,7 +84,7 @@ $(NAME): $(LIBFT) $(PATHS_OBJ) $(OBJ_FT_LS)
 
 $(PATH_OBJ_FT_LS)%.o: $(PATH_SRC_FT_LS)%.c $(INC)
 	@printf %b "Compiling $@...                                             \r"
-	@$(CC) $(CC_FLAGS) -o $@ -c $< -I $(PATH_INC)
+	@$(CC) $(CC_FLAGS) -o $@ -c $<
 	@printf %b "                                                            \r"
 
 $(LIBFT):
@@ -94,8 +94,8 @@ $(PATHS_OBJ):
 	@mkdir $@
 
 clean:
-	@rm -f $(PATH_OBJ)
-	@make -C clean $(PATH_LIBFT)
+	@rm -rf $(PATH_OBJ)
+	@make clean -C $(PATH_LIBFT)
 
 fclean:
 	@rm -f $(NAME)

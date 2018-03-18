@@ -6,12 +6,12 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/03/12 14:00:57 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/12 14:02:14 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/18 11:21:17 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#include "ft_ls.h"
+#include "../../incs/ft_ls.h"
 
 int			ascii_sort(t_file *to_sort, t_file *node)
 {

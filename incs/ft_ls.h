@@ -6,7 +6,7 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/14 13:47:30 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/16 16:20:32 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/18 13:28:45 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -59,8 +59,8 @@ int					ft_getdirstats(t_file **file, char *arg, t_flags *flags);
 int					ft_createnode(t_file **file, t_tree **tocreate);
 int					ft_fill_tree(t_file **file, t_tree **tree, t_flags *flags,
 						int errors);
-void				ft_print_name(t_tree *tree, int lengh, t_flags *flags);
-void				ft_print_tree(t_tree *tree, int lengh, t_flags *flags);
+void				ft_print_name(t_tree *tree, t_flags *flags);
+void				ft_print_tree(t_tree *tree, t_flags *flags);
 void				ft_computeargs(t_tree *tree, t_flags **flags);
 int					ft_printl(t_file **file, t_flags **flags);
 void				ft_free_node(t_tree **node);
@@ -75,7 +75,7 @@ int					ft_double_sort(t_file **file, t_tree **node, int(*f1)(),
 						int(*f2)());
 int					rev_time_sort(t_file *to_sort, t_file *node);
 void				ft_print_errors(t_tree *tree, t_flags *flags);
-void				ft_print_name(t_tree *tree, int lengh, t_flags *flags);
+void				ft_print_name(t_tree *tree, t_flags *flags);
 int					ft_init_flags(t_flags **flags);
 int					ft_init_file(t_file **file, int i,
 						char *arg);
@@ -83,4 +83,8 @@ void				ft_getfilestats(t_file **file, t_tree **errors,
 						t_tree **tree, t_flags *flags);
 char				*ft_uncap(char *str);
 int					ft_error(t_file *file, char *error, t_flags *flags);
+int					ft_print_help(t_flags **flags);
+int					ft_checkflag(char c, t_flags **flags);
+int					ft_print_minmaj(t_file *file);
+void				ft_recursive(t_tree *tree, t_flags **flags);
 #endif

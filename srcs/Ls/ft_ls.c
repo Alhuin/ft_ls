@@ -6,29 +6,12 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/13 16:17:24 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/16 18:40:03 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/18 13:56:26 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#include "ft_ls.h"
-
-int					ft_print_help(t_flags **flags)
-{
-	char *line;
-	int fd;
-
-	(*flags)->help = 1;
-	fd = open("srcs/Ls/man.txt", O_RDONLY);
-	line = NULL;
-	while (get_next_line(fd, &line) > 0)
-	{
-		ft_printf("%s\n", line);
-		ft_strdel(&line);
-	}
-	ft_strdel(&line);
-	return (-1);
-}
+#include "../../incs/ft_ls.h"
 
 static int			ft_getflags(t_flags **flags, char *arg)
 {
@@ -39,21 +22,9 @@ static int			ft_getflags(t_flags **flags, char *arg)
 	{
 		while (arg[i])
 		{
-			if (arg[i] == 'l')
-				(*flags)->l = 1;
-			else if (ft_strcmp(arg + i, "-help") == 0)
+			if (ft_strcmp(arg + i, "-help") == 0)
 				return (ft_print_help(flags));
-			else if (arg[i] == 'a')
-				(*flags)->a = 1;
-			else if (arg[i] == '1')
-				(*flags)->un = 1;
-			else if (arg[i] == 'r')
-				(*flags)->r = 1;
-			else if (arg[i] == 'R')
-				(*flags)->bigr = 1;
-			else if (arg[i] == 't')
-				(*flags)->t = 1;
-			else
+			else if (ft_checkflag(arg[i], flags) == -1)
 				return (-1);
 			i++;
 		}
@@ -62,17 +33,19 @@ static int			ft_getflags(t_flags **flags, char *arg)
 	return (0);
 }
 
-static void			ft_recursive(t_tree *tree, t_flags **flags)
+void				ft_recursive(t_tree *tree, t_flags **flags)
 {
 	if (tree->left)
 		ft_recursive(tree->left, flags);
-	if (S_ISDIR(tree->file->sb.st_mode) && (tree->file->name[0] != '.' ||
-				(*flags)->a == 1))
+	if (S_ISDIR(tree->file->sb.st_mode))
 	{
-		if (ft_strcmp(tree->file->name, "..") != 0 &&
-			ft_strcmp(tree->file->name, ".") != 0)
-			if (ft_getdirstats(&tree->file, tree->file->path, *flags) == 0)
+		if ((ft_strncmp(tree->file->name, "../", 3) == 0) || (ft_strcmp(tree->file->name, "..") != 0 && ft_strcmp(tree->file->name, ".") != 0) || ((tree->file->name[0] != '.' || (*flags)->a == 1)))
+		{
+			if (tree->file->arg != 1)
+				ft_getdirstats(&tree->file, tree->file->path, *flags);
+			if (tree->file->subtree)
 				ft_recursive(tree->file->subtree, flags);
+		}
 	}
 	if (tree->right)
 		ft_recursive(tree->right, flags);
@@ -83,8 +56,8 @@ static void			ft_print(t_tree *errors, t_tree *tree, t_flags *flags)
 	if (errors)
 		ft_print_errors(errors, flags);
 	ft_computeargs(tree, &flags);
-	if (flags->bigr == 1 && tree->file->subtree)
-		ft_recursive(tree->file->subtree, &flags);
+//	if (flags->bigr == 1 && tree)
+//		ft_recursive(tree, &flags);
 }
 
 static int			ft_free(t_tree **errors, t_tree **tree, t_flags **flags)
@@ -113,7 +86,7 @@ int					main(int argc, char *argv[])
 	while (argv[i] && ft_getflags(&flags, argv[i]) == 1)
 		i++;
 	if (flags->help == 1)
-			return (ft_free(&errors, &tree, &flags));
+		return (ft_free(&errors, &tree, &flags));
 	while (i < argc || (i == argc && flags->arg == 0))
 	{
 		if (ft_init_file(&file, (i == argc ? 1 : 0), argv[i]) == -1)

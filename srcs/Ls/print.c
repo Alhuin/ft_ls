@@ -6,27 +6,27 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/27 19:00:54 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/16 15:39:23 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/18 14:31:59 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#include "ft_ls.h"
+#include "../../incs/ft_ls.h"
 
-void				ft_print_name(t_tree *tree, int lengh, t_flags *flags)
+void				ft_print_name(t_tree *tree, t_flags *flags)
 {
 	if (flags->l != 1 || flags->un == 1)
 	{
 		if (tree->file->name[0] != '.' || flags->a == 1)
 		{
 			if (S_ISLNK(tree->file->sb.st_mode))
-				ft_printf("{magenta}%-*s {eoc}", lengh, tree->file->name);
+				ft_printf("{magenta}%-10s {eoc}", tree->file->name);
 			else if (S_ISDIR(tree->file->sb.st_mode))
-				ft_printf("{bcyan}%-*s {eoc}", lengh, tree->file->name);
+				ft_printf("{bcyan}%-10s {eoc}", tree->file->name);
 			else if (tree->file->sb.st_mode & S_IXUSR)
-				ft_printf("{red}%-*s {eoc}", lengh, tree->file->name);
+				ft_printf("{red}%-10s {eoc}", tree->file->name);
 			else
-				ft_printf("%-*s ", lengh, tree->file->name);
+				ft_printf("%-10s ", tree->file->name);
 			if (flags->un == 1)
 				ft_printf("\n");
 		}
@@ -35,40 +35,38 @@ void				ft_print_name(t_tree *tree, int lengh, t_flags *flags)
 		ft_printl(&(tree->file), &flags);
 }
 
-void				ft_print_tree(t_tree *tree, int lengh, t_flags *flags)
+void				ft_print_tree(t_tree *tree, t_flags *flags)
 {
 	if (tree != NULL)
 	{
 		if (tree->left)
-			ft_print_tree(tree->left, lengh, flags);
-		ft_print_name(tree, lengh, flags);
+			ft_print_tree(tree->left, flags);
+		ft_print_name(tree, flags);
 		if (tree->right)
-			ft_print_tree(tree->right, lengh, flags);
+			ft_print_tree(tree->right, flags);
 	}
 }
 
 static int			ft_print_date(time_t t)
 {
-	char	*date;
 	char	*m;
 	char	*d;
 	char	*h;
 	time_t	now;
 
 	now = time(NULL);
-	date = ctime(&(t));
-	h = ft_strsub(date, 11, 5);
-	d = ft_strsub(date, 8, 2);
-	m = ft_strsub(date, 4, 3);
+	h = ft_strsub(ctime(&(t)), 11, 5);
+	d = ft_strsub(ctime(&(t)), 8, 2);
+	m = ft_strsub(ctime(&(t)), 4, 3);
 	if (!h || !d || !m)
 		return (-1);
+	ft_printf("%4s", m);
+	ft_strdel(&m);
 	ft_printf("%3s", d);
 	ft_strdel(&d);
-	ft_printf("%4s", ft_uncap(m));
-	ft_strdel(&m);
 	if (now - t >= 15778476 || now - t <= -3600)
 	{
-		d = ft_strsub(date, 20, 4);
+		d = ft_strsub(ctime(&(t)), 20, 4);
 		ft_printf("%6s", d);
 		ft_strdel(&d);
 	}
@@ -95,12 +93,6 @@ static int			ft_printl_name(t_file **file)
 		ft_printf(" {red}%s{eoc}\n", (*file)->name);
 	else
 		ft_printf(" %s\n", (*file)->name);
-	return (0);
-}
-
-int					ft_print_minmaj(t_file *file)
-{
-	ft_printf("%4d,%5d", major(file->sb.st_rdev), minor(file->sb.st_rdev));
 	return (0);
 }
 

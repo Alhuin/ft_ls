@@ -6,12 +6,12 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/03/12 14:02:36 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/16 15:20:37 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/18 13:29:03 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#include "ft_ls.h"
+#include "../../incs/ft_ls.h"
 
 int			ft_init_flags(t_flags **flags)
 {
@@ -78,7 +78,7 @@ void		ft_print_errors(t_tree *tree, t_flags *flags)
 	}
 	else
 	{
-		ft_print_name(tree, 0, flags);
+		ft_print_name(tree, flags);
 		ft_printf("\n");
 	}
 	if (tree->right)

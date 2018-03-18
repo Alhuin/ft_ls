@@ -6,12 +6,12 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/14 13:47:11 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/12 14:07:58 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/18 11:21:09 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#include "ft_ls.h"
+#include "../../incs/ft_ls.h"
 
 int					ft_createnode(t_file **file, t_tree **tocreate)
 {

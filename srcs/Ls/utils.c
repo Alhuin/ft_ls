@@ -6,12 +6,12 @@
 /*   By: jjanin-r <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/02/27 19:10:55 by jjanin-r     #+#   ##    ##    #+#       */
-/*   Updated: 2018/03/16 18:17:52 by jjanin-r    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/03/18 14:27:11 by jjanin-r    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#include "ft_ls.h"
+#include "../../incs/ft_ls.h"
 
 char	*ft_get_perms(mode_t mode)
 {
@@ -22,6 +22,12 @@ char	*ft_get_perms(mode_t mode)
 	ret[0] = '\0';
 	if (S_ISLNK(mode))
 		ft_strcat(ret, "l");
+	else if (S_ISCHR(mode))
+		ft_strcat(ret, "c");
+	else if (S_ISBLK(mode))
+		ft_strcat(ret, "b");
+	else if (S_ISFIFO(mode))
+		ft_strcat(ret, "p");
 	else
 		ft_strcat(ret, (S_ISDIR(mode) ? "d" : "-"));
 	ft_strcat(ret, ((mode & S_IRUSR) ? "r" : "-"));
@@ -33,6 +39,8 @@ char	*ft_get_perms(mode_t mode)
 	ft_strcat(ret, ((mode & S_IROTH) ? "r" : "-"));
 	ft_strcat(ret, ((mode & S_IWOTH) ? "w" : "-"));
 	ft_strcat(ret, ((mode & S_IXOTH) ? "x" : "-"));
+	if (mode & S_ISVTX)
+		ft_strcat(ret, ((mode & S_IXUSR) ? "t" : "T"));
 	return (ret);
 }
 
@@ -91,18 +99,14 @@ int		ft_fill_tree(t_file **file, t_tree **tree, t_flags *flags, int error)
 	return (0);
 }
 
-int		ft_subfile_init(t_file **subfile, int lengh, char *path, char *name)
+int		ft_subfile_init(t_file **subfile, char *path, char *name)
 {
 	if (!(*subfile = malloc(sizeof(t_file))))
 		return (-1);
 	(*subfile)->total = 0;
 	(*subfile)->name = ft_strdup(name);
-	if ((int)ft_strlen((*subfile)->name) > lengh)
-		lengh = (int)ft_strlen((*subfile)->name);
 	(*subfile)->path = ft_buildpath(path, (*subfile)->name);
 	lstat((*subfile)->path, &(*subfile)->sb);
-	if (lengh < (int)ft_strlen((*subfile)->name))
-		lengh = (int)ft_strlen((*subfile)->name);
 	return (0);
 }
 
@@ -110,27 +114,29 @@ int		ft_getdirstats(t_file **file, char *path, t_flags *flags)
 {
 	DIR				*rep;
 	struct dirent	*fichierlu;
-	int				lengh;
 	t_file			*subfile;
 
-	lengh = 0;
+	if (flags->bigr == 1)
+		flags->arg++;
 	rep = opendir(path);
 	if (rep == NULL)
 		return (ft_error(*file, strerror(errno), flags));
 	while ((fichierlu = readdir(rep)) != NULL)
 	{
-		ft_subfile_init(&subfile, lengh, path, fichierlu->d_name);
-		if (flags->l == 1)
+		ft_subfile_init(&subfile, path, fichierlu->d_name);
+		if (flags->l == 1 && (subfile->name[0] != '.' || flags->a == 1))
 			(*file)->total += subfile->sb.st_blocks;
 		ft_fill_tree(&subfile, &(*file)->subtree, flags, 0);
 	}
 	if (rep == NULL || closedir(rep) == -1)
 		return (ft_error(*file, strerror(errno), flags));
-	if (flags->arg > 1 || flags->bigr == 1)
+	if (flags->bigr == 1 && flags->arg > 2)
 		ft_printf("%s:\n", (flags->bigr == 1 ? (*file)->path : (*file)->name));
 	if (flags->l == 1 && flags->un != 1)
 		ft_printf("total %d\n", (*file)->total);
-	ft_print_tree((*file)->subtree, lengh + 1, flags);
-	ft_printf("\n");
+	ft_print_tree((*file)->subtree, flags);
+	ft_printf(flags->arg > 2 ? "\n\n" : "\n");
+	if ((*file)->arg == 1 && (*file)->subtree && flags->bigr == 1)
+		ft_recursive((*file)->subtree, &flags);
 	return (0);
 }
